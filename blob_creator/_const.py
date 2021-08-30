@@ -1,17 +1,16 @@
 COLORS = [
-    "#DF0E0E",
-    "#DF550E",
-    "#DFA80E",
-    "#DFDD0E",
-    "#65DF0E",
-    "#0EDFBC",
-    "#0EBCDF",
-    "#0E6FDF",
-    "#0E22DF",
-    "#650EDF",
-    "#A60EDF",
-    "#DF0EBA",
-    "#DF0E73"
+    ("red", "#DF0E0E"),
+    ("orange", "#DF550E"),
+    ("light orange", "#DFA80E"),
+    ("yellow", "#DFDD0E"),
+    ("light green", "#65DF0E"),
+    ("turquoise", "#0EDFBC"),
+    ("light blue", "#0EBCDF"),
+    ("blue", "#0E6FDF"),
+    ("dark blue", "#0E22DF"),
+    ("violett", "#650EDF"),
+    ("purple", "#A60EDF"),
+    ("pink", "#DF0E73")
 ]
 
 REPLACE_STRING = "#??????"
