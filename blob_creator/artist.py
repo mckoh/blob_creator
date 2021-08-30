@@ -17,6 +17,8 @@ class Artist:
         self._n = n
         self._scatter = 10
         self._blobs = list()
+        self._sizes = list()
+        self._scales = list()
 
 
     def _create_blobs(self) -> None:
@@ -39,6 +41,7 @@ class Artist:
             # save the blob             
             blob = (name, size, weight, color_string, cuteness)
             self._blobs.append(blob)
+            self._sizes.append(size)
 
             # draw the blob
             self._draw_blob(color=color_html, filename=f"blob_{name}")
@@ -73,3 +76,56 @@ class Artist:
         for blob in self._blobs:
             name = blob[0]
             remove(f"blob_{name}.png")
+            
+    def _size_drawings(self):
+        
+        from PIL import Image
+        
+        max_size = max(self._sizes)
+        
+        for size in self._sizes:
+            self._scales.append(size/max_size)
+        
+        for i, blob in enumerate(self._blobs):
+            img_name = f"blob_{blob[0]}.png"
+            image = Image.open(img_name)
+            width, height = image.size
+            width, height = int(width*self._scales[i]), int(height*self._scales[i])
+            image = image.resize((width,height),Image.ANTIALIAS)
+            image.save(fp=img_name)
+            
+    def plot_population(self):
+        from matplotlib import pyplot as plt
+        from numpy import ceil
+
+        nrows = int(ceil(len(self._blobs)/4))
+        ncols = 4
+
+        fig, ax = plt.subplots(
+            ncols=ncols,
+            nrows=nrows,
+            figsize=(20,10),
+            sharex=True,
+            sharey=True
+        )
+
+        i = 0
+        for col in range(ncols):
+            for row in range(nrows):
+                if i == len(self._blobs):
+                    break
+                blob = self._blobs[i]
+                name = blob[0]
+                img_path = f"blob_{name}.png"
+                image = plt.imread(img_path)
+                ax[row, col].set_title(name)
+                ax[row, col].imshow(image)
+                
+                ax[row, col].set_ylim([476,0])
+                ax[row, col].set_xlim([0,417])
+                
+                i += 1
+
+        for col in range(ncols):
+            for row in range(nrows):
+                ax[row, col].axis('off')
