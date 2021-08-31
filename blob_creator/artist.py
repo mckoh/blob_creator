@@ -7,19 +7,28 @@ from _const import COLORS
 
 class Artist:
 
-    def __init__(self, n=5, scatter=12) -> None:
+    def __init__(self, n=5, scatter=12, export_png=True) -> None:
         """Artist class that is used to generate a blob data set.
         
         :param n: The size of the dataset
         :param scatter: The variability of the data that are generated
+        :param export_png: A switch that lets you export the original pngs
         """
 
         assert scatter <= 12, ValueError("Scatter cannot be larger than 12")
         self._n = n
         self._scatter = scatter
+        self._export_png = export_png
         self._blobs = list()
         self._sizes = list()
         self._scales = list()
+
+        from os import mkdir
+        from os.path import isdir
+
+        # create repo for new population
+        if not isdir(self._get_population_str()):
+            mkdir(self._get_population_str())
 
 
     def create_blobs(self) -> None:
@@ -27,6 +36,7 @@ class Artist:
 
         from numpy.random import normal, randint
         from names import get_first_name
+        from os.path import join
 
         for i in range(self._n):
 
@@ -72,12 +82,18 @@ class Artist:
             # draw the blob
             self._draw_blob(color=color_html, filename=f"blob_{name}")
 
-        img_name = f"blob_population_n{self._n}_s{self._scatter}.png"
+        img_name = join(
+            self._get_population_str(),
+            "population.png"
+        )
 
         self._size_drawings()
         self._plot_population(img_name=img_name)
-        self._delete_drawings()
+        if not self._export_png:
+            self._delete_drawings()
 
+    def _get_population_str(self):
+        return f"blob_population_n{self._n}_s{self._scatter}"
 
     def _draw_blob(self, filename, color="#000000") -> None:
         """Can be used to generate a blob image as png
@@ -90,32 +106,39 @@ class Artist:
         from svglib.svglib import svg2rlg
         from reportlab.graphics import renderPM
         from os import remove
+        from os.path import join
 
-        with open("temp.svg", "w", encoding="utf8") as temp_file:
+        path = join(self._get_population_str(), "temp.svg")
+
+        with open(path, "w", encoding="utf8") as temp_file:
             temp_file.write(
                 MONSTER.replace(REPLACE_STRING, color)
             )
         
-        drawing = svg2rlg("temp.svg")
-        renderPM.drawToFile(drawing, f"{filename}.png", fmt="PNG")
+        drawing = svg2rlg(path)
+        renderPM.drawToFile(
+            drawing,
+            join(self._get_population_str(), f"{filename}.png"),
+            fmt="PNG"
+        )
 
-        remove("temp.svg")
+        remove(path)
 
     def _delete_drawings(self):
         """Can be called to remove all blob png files saved to disk."""
 
         from os import remove
+        from os.path import join
+
         for blob in self._blobs:
             name = blob[0]
-            try:
-                remove(f"blob_{name}.png")
-            except:
-                print("Name duplicate in Blob family  detected.")
+            remove(join(self._get_population_str(), f"blob_{name}.png"))
             
     def _size_drawings(self):
         """Is used to scale the image size of the temporary png images"""
         
         from PIL import Image
+        from os.path import join
         
         max_size = max(self._sizes)
         
@@ -123,7 +146,7 @@ class Artist:
             self._scales.append(size/max_size)
         
         for i, blob in enumerate(self._blobs):
-            img_name = f"blob_{blob[0]}.png"
+            img_name = join(self._get_population_str(), f"blob_{blob[0]}.png")
             image = Image.open(img_name)
             width, height = image.size
             width, height = int(width*self._scales[i]), int(height*self._scales[i])
@@ -138,6 +161,7 @@ class Artist:
 
         from matplotlib import pyplot as plt
         from numpy import ceil
+        from os.path import join
 
         nrows = int(ceil(len(self._blobs)/4))
         ncols = 4
@@ -157,7 +181,7 @@ class Artist:
                     break
                 blob = self._blobs[i]
                 name = blob[0]
-                img_path = f"blob_{name}.png"
+                img_path = join(self._get_population_str(), f"blob_{name}.png")
                 image = plt.imread(img_path)
                 ax[row, col].set_title(name, loc="left")
                 ax[row, col].imshow(image)
@@ -173,8 +197,15 @@ class Artist:
         
         plt.savefig(img_name)
 
-    def export_data(self):
+    def export_data(self, sep="\t"):
+        """Can be used to export a dataframe with the generated blob specs.
+        
+        :param sep: Used separator for csv export (default Tab)
+        """
+
         from pandas import DataFrame
+        from os.path import join
+
         df = DataFrame(
             self._blobs,
             columns=[
@@ -187,4 +218,4 @@ class Artist:
         )
         df.index = df.name
         df.drop("name", axis=1, inplace=True)
-        return df
+        df.to_excel(join(self._get_population_str(), "population.xlsx"))
