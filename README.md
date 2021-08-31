@@ -17,9 +17,19 @@ a = Artist(n=20, scatter=12, export_png=True)
 # This will create the blobs
 a.create_blobs()
 
-# This will export your dataset to disk
+# This will export your dataset and your population plot to disk
 a.export_data()
 ```
+
+## Use Generator from Terminal
+
+You can also use the Generator from your CLI, calling `main.py` and passing all necessary arguments. The following call will generate a population of 30 blobs with a scattering of 12 and a population plot layout with 10 columns:
+
+```shell
+python main.py 30 12 10
+```
+
+>**Note:** This script will not export single blob images as pngs. To do this, you can change the code in [`main.py`](main.py), changing `export_png` from `False` to `True`.
 
 ## Installation
 
