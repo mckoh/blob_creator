@@ -210,11 +210,8 @@ class Artist:
         plt.tight_layout()
         plt.savefig(img_name)
 
-    def export_data(self, sep="\t"):
-        """Can be used to export a dataframe with the generated blob specs.
-        
-        :param sep: Used separator for csv export (default Tab)
-        """
+    def export_data(self):
+        """Can be used to export a dataframe with the generated blob specs."""
         
         from os.path import join
 
@@ -231,6 +228,7 @@ class Artist:
             self._delete_drawings()
 
     def _plot_data(self):
+        """Can be used to plot the data using histogram, barchar and scatterplot."""
 
         from matplotlib import pyplot as plt
         from os.path import join
