@@ -1,6 +1,7 @@
 import sys
 import os
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+# Add current path to path to allow dependency import
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__))))
 from _const import COLORS
 
@@ -38,6 +39,8 @@ class Artist:
             weight = round(size*2+size*normal(loc=0, scale=1), 2)
             
             # determin color based on size
+            # as 12 is the largest scatter,
+            # 6 is the reference deviation here
             s = 6
             if size < m-2*s:
                 c = 0
@@ -110,6 +113,7 @@ class Artist:
                 print("Name duplicate in Blob family  detected.")
             
     def _size_drawings(self):
+        """Is used to scale the image size of the temporary png images"""
         
         from PIL import Image
         
@@ -126,7 +130,12 @@ class Artist:
             image = image.resize((width,height),Image.ANTIALIAS)
             image.save(fp=img_name)
             
-    def _plot_population(self, img_name):
+    def _plot_population(self, img_name) -> None:
+        """Can be used to plot a population chart
+        
+        :param img_name: The name of the final image that is saved on disk
+        """
+
         from matplotlib import pyplot as plt
         from numpy import ceil
 
@@ -163,3 +172,19 @@ class Artist:
                 ax[row, col].axis('off')
         
         plt.savefig(img_name)
+
+    def export_data(self):
+        from pandas import DataFrame
+        df = DataFrame(
+            self._blobs,
+            columns=[
+                "name", 
+                "size",
+                "weight",
+                "color",
+                "cuteness"
+            ]
+        )
+        df.index = df.name
+        df.drop("name", axis=1, inplace=True)
+        return df
