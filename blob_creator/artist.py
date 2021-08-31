@@ -15,13 +15,13 @@ class Artist:
 
         assert scatter <= 12, ValueError("Scatter cannot be larger than 12")
         self._n = n
-        self._scatter = 10
+        self._scatter = scatter
         self._blobs = list()
         self._sizes = list()
         self._scales = list()
 
 
-    def _create_blobs(self) -> None:
+    def create_blobs(self) -> None:
         """Can be called to create a random set of blobs."""
 
         from numpy.random import normal, randint
@@ -29,14 +29,37 @@ class Artist:
 
         for i in range(self._n):
 
+            # Constants for normal size
+            s = 0.5*self._scatter
+            m = 20
+
             # create the blob
-            size = round(normal(loc=20, scale=0.1*self._scatter), 2)
-            weight = round(size*2+size*normal(loc=0, scale=0.1*self._scatter), 2)
-            color = COLORS[randint(low=0, high=self._scatter)]
+            size = round(normal(loc=m, scale=s), 2)
+            weight = round(size*2+size*normal(loc=0, scale=1), 2)
+            
+            # determin color based on size
+            s = 6
+            if size < m-2*s:
+                c = 0
+            elif size < m-s:
+                c = 1
+            elif size < m-0.3*s:
+                c = 2
+            elif size < m+0.3*s:
+                c = 3
+            elif size < m+s:
+                c = 4
+            elif size < m+2*s:
+                c = 5
+            else:
+                c = 6
+
+            color = COLORS[c]
             color_html = color[1]
             color_string = color[0]
+
             cuteness = int(normal(loc=self._scatter, scale=0.2*self._scatter))
-            name = get_first_name()
+            name = get_first_name() + " " + str(i)
 
             # save the blob             
             blob = (name, size, weight, color_string, cuteness)
@@ -45,6 +68,12 @@ class Artist:
 
             # draw the blob
             self._draw_blob(color=color_html, filename=f"blob_{name}")
+
+        img_name = f"blob_population_n{self._n}_s{self._scatter}.png"
+
+        self._size_drawings()
+        self._plot_population(img_name=img_name)
+        self._delete_drawings()
 
 
     def _draw_blob(self, filename, color="#000000") -> None:
@@ -75,7 +104,10 @@ class Artist:
         from os import remove
         for blob in self._blobs:
             name = blob[0]
-            remove(f"blob_{name}.png")
+            try:
+                remove(f"blob_{name}.png")
+            except:
+                print("Name duplicate in Blob family  detected.")
             
     def _size_drawings(self):
         
@@ -94,7 +126,7 @@ class Artist:
             image = image.resize((width,height),Image.ANTIALIAS)
             image.save(fp=img_name)
             
-    def plot_population(self):
+    def _plot_population(self, img_name):
         from matplotlib import pyplot as plt
         from numpy import ceil
 
@@ -104,7 +136,7 @@ class Artist:
         fig, ax = plt.subplots(
             ncols=ncols,
             nrows=nrows,
-            figsize=(20,10),
+            figsize=(15,15*nrows/ncols),
             sharex=True,
             sharey=True
         )
@@ -118,7 +150,7 @@ class Artist:
                 name = blob[0]
                 img_path = f"blob_{name}.png"
                 image = plt.imread(img_path)
-                ax[row, col].set_title(name)
+                ax[row, col].set_title(name, loc="left")
                 ax[row, col].imshow(image)
                 
                 ax[row, col].set_ylim([476,0])
@@ -129,3 +161,5 @@ class Artist:
         for col in range(ncols):
             for row in range(nrows):
                 ax[row, col].axis('off')
+        
+        plt.savefig(img_name)
