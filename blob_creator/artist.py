@@ -3,7 +3,7 @@ import os
 
 # Add current path to path to allow dependency import
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__))))
-from _const import COLORS
+from const import COLORS
 
 class Artist:
 
@@ -110,7 +110,7 @@ class Artist:
         :param color: The HTML color that the blob should have
         """
 
-        from _const import MONSTER, REPLACE_STRING
+        from const import MONSTER, REPLACE_STRING
         from svglib.svglib import svg2rlg
         from reportlab.graphics import renderPM
         from os import remove
