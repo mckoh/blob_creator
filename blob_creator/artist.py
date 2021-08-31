@@ -7,12 +7,13 @@ from _const import COLORS
 
 class Artist:
 
-    def __init__(self, n=5, scatter=12, export_png=True) -> None:
+    def __init__(self, n=5, scatter=12, export_png=True, cols=None) -> None:
         """Artist class that is used to generate a blob data set.
         
         :param n: The size of the dataset
         :param scatter: The variability of the data that are generated
         :param export_png: A switch that lets you export the original pngs
+        :param cols: The number of columns to be used for plotting the population
         """
 
         assert scatter <= 12, ValueError("Scatter cannot be larger than 12")
@@ -22,6 +23,8 @@ class Artist:
         self._blobs = list()
         self._sizes = list()
         self._scales = list()
+        self._df = None
+        self._cols = cols
 
         from os import mkdir
         from os.path import isdir
@@ -37,6 +40,7 @@ class Artist:
         from numpy.random import normal, randint
         from names import get_first_name
         from os.path import join
+        from pandas import DataFrame
 
         for i in range(self._n):
 
@@ -46,7 +50,7 @@ class Artist:
 
             # create the blob
             size = round(normal(loc=m, scale=s), 2)
-            weight = round(size*2+size*normal(loc=0, scale=1), 2)
+            weight = round(size*2+3*normal(loc=0, scale=1), 2)
             
             # determin color based on size
             # as 12 is the largest scatter,
@@ -70,8 +74,7 @@ class Artist:
             color = COLORS[c]
             color_html = color[1]
             color_string = color[0]
-
-            cuteness = int(normal(loc=self._scatter, scale=0.2*self._scatter))
+            cuteness = randint(low=1, high=6)
             name = get_first_name() + " " + str(i)
 
             # save the blob             
@@ -82,15 +85,20 @@ class Artist:
             # draw the blob
             self._draw_blob(color=color_html, filename=f"blob_{name}")
 
-        img_name = join(
-            self._get_population_str(),
-            "population.png"
-        )
-
         self._size_drawings()
-        self._plot_population(img_name=img_name)
-        if not self._export_png:
-            self._delete_drawings()
+
+        self._df = DataFrame(
+            self._blobs,
+            columns=[
+                "name", 
+                "size",
+                "weight",
+                "color",
+                "cuteness"
+            ]
+        )
+        self._df.index = self._df.name
+        self._df.drop("name", axis=1, inplace=True)
 
     def _get_population_str(self):
         return f"blob_population_n{self._n}_s{self._scatter}"
@@ -163,8 +171,12 @@ class Artist:
         from numpy import ceil
         from os.path import join
 
-        nrows = int(ceil(len(self._blobs)/4))
-        ncols = 4
+        if not self._cols:
+            ncols = max(int(self._n/8), 2)
+        else:
+            ncols = self._cols
+        nrows = int(ceil(len(self._blobs)/ncols))
+        
 
         fig, ax = plt.subplots(
             ncols=ncols,
@@ -195,6 +207,7 @@ class Artist:
             for row in range(nrows):
                 ax[row, col].axis('off')
         
+        plt.tight_layout()
         plt.savefig(img_name)
 
     def export_data(self, sep="\t"):
@@ -202,20 +215,61 @@ class Artist:
         
         :param sep: Used separator for csv export (default Tab)
         """
-
-        from pandas import DataFrame
+        
         from os.path import join
 
-        df = DataFrame(
-            self._blobs,
-            columns=[
-                "name", 
-                "size",
-                "weight",
-                "color",
-                "cuteness"
-            ]
+        self._df.to_excel(join(self._get_population_str(), "population.xlsx"))
+
+        img_name = join(
+            self._get_population_str(),
+            "population.png"
         )
-        df.index = df.name
-        df.drop("name", axis=1, inplace=True)
-        df.to_excel(join(self._get_population_str(), "population.xlsx"))
+        
+        self._plot_population(img_name=img_name)
+        self._plot_data()
+        if not self._export_png:
+            self._delete_drawings()
+
+    def _plot_data(self):
+
+        from matplotlib import pyplot as plt
+        from os.path import join
+
+        fig, ax = plt.subplots(nrows=1, ncols=4, figsize=(20,5))
+
+        ax[0].hist(self._df["size"], label="data", color="k", bins=7)
+        ax[1].hist(self._df["weight"], label="data", color="k", bins=7)
+        ax[2].bar(
+            height=self._df["cuteness"].value_counts().values,
+            x=self._df["cuteness"].value_counts().index,
+            label="data",
+            color="k"
+        )
+        ax[3].scatter(x=self._df["size"], y=self._df["weight"], label="data", color="k")
+
+        ax[0].plot([self._df["size"].mean()], [0.2], "vr", markersize=15, label="mean")
+        ax[1].plot([self._df["weight"].mean()], [0.2], "vr", markersize=15, label="mean")
+        
+        ax[0].plot([self._df["size"].median()], [0.2], "v", color="orange", markersize=15, label="median")
+        ax[1].plot([self._df["weight"].median()], [0.2], "v", color="orange", markersize=15, label="median")
+        ax[2].plot([self._df["cuteness"].median()], [0.2], "v", color="orange", markersize=15, label="median")
+        
+        ax[0].legend(loc=0)
+        ax[1].legend(loc=0)
+        ax[2].legend(loc=0)
+        ax[3].legend(loc=0)
+
+        ax[0].set_title("Size Histogram")
+        ax[1].set_title("Weight Histogram")
+        ax[2].set_title("Cuteness Barchart")
+        ax[3].set_title("Weight over Size Scatter Plot")
+
+        ax[0].set_xlabel("size class"); ax[0].set_ylabel("abs. frequency")
+        ax[1].set_xlabel("weight class"); ax[1].set_ylabel("abs. frequency")
+        ax[2].set_xlabel("cuteness class"); ax[2].set_ylabel("abs. frequency")
+        ax[3].set_xlabel("size"); ax[3].set_ylabel("weight")
+        fig.suptitle("Analysis of Population")
+
+        plt.savefig(
+            join(self._get_population_str(), "histograms.png")
+        )
