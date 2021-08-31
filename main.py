@@ -1,5 +1,5 @@
 from sys import argv
-from blob_creator.artist import Artist
+from src.blob_creator.artist import Artist
 
 if __name__ == "__main__":
 

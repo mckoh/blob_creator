@@ -71,9 +71,9 @@ class Artist:
             else:
                 c = 6
 
-            color = COLORS[c]
-            color_html = color[1]
-            color_string = color[0]
+            color_html = COLORS[c][1]
+            color_string = COLORS[c][0]
+            
             cuteness = randint(low=1, high=6)
             name = get_first_name() + " " + str(i)
 
@@ -85,8 +85,10 @@ class Artist:
             # draw the blob
             self._draw_blob(color=color_html, filename=f"blob_{name}")
 
+        # resize the blob images according to blob size
         self._size_drawings()
 
+        # create a blob dataframe
         self._df = DataFrame(
             self._blobs,
             columns=[
@@ -101,6 +103,8 @@ class Artist:
         self._df.drop("name", axis=1, inplace=True)
 
     def _get_population_str(self):
+        """Can be used to generate a population identification string."""
+        
         return f"blob_population_n{self._n}_s{self._scatter}"
 
     def _draw_blob(self, filename, color="#000000") -> None:
@@ -132,7 +136,7 @@ class Artist:
 
         remove(path)
 
-    def _delete_drawings(self):
+    def _delete_drawings(self) -> None:
         """Can be called to remove all blob png files saved to disk."""
 
         from os import remove
@@ -142,7 +146,7 @@ class Artist:
             name = blob[0]
             remove(join(self._get_population_str(), f"blob_{name}.png"))
             
-    def _size_drawings(self):
+    def _size_drawings(self) -> None:
         """Is used to scale the image size of the temporary png images"""
         
         from PIL import Image
@@ -175,8 +179,8 @@ class Artist:
             ncols = max(int(self._n/8), 2)
         else:
             ncols = self._cols
+
         nrows = int(ceil(len(self._blobs)/ncols))
-        
 
         fig, ax = plt.subplots(
             ncols=ncols,
@@ -210,7 +214,7 @@ class Artist:
         plt.tight_layout()
         plt.savefig(img_name)
 
-    def export_data(self):
+    def export_data(self) -> None:
         """Can be used to export a dataframe with the generated blob specs."""
         
         from os.path import join
@@ -227,7 +231,7 @@ class Artist:
         if not self._export_png:
             self._delete_drawings()
 
-    def _plot_data(self):
+    def _plot_data(self) -> None:
         """Can be used to plot the data using histogram, barchar and scatterplot."""
 
         from matplotlib import pyplot as plt

@@ -30,7 +30,3 @@ python main.py 30 12 10
 ```
 
 >**Note:** This script will not export single blob images as pngs. To do this, you can change the code in [`main.py`](main.py), changing `export_png` from `False` to `True`.
-
-## Installation
-
-Make sure to install all required dependencies, given in [`requirements.txt`](requirements.txt).

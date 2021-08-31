@@ -1,0 +1,14 @@
+[build-system]
+requires = [
+    "setuptools>=42",
+    "wheel",
+    "openpyxl",
+    "pandas",
+    "numpy",
+    "matplotlib",
+    "Pillow",
+    "names",
+    "svglib",
+    "reportlab"
+]
+build-backend = "setuptools.build_meta"
