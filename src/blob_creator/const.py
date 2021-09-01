@@ -10,7 +10,7 @@ COLORS = [
 
 REPLACE_STRING = "#??????"
 
-MONSTER = '''<?xml version="1.0" standalone="yes"?>
+MONSTER_A = '''<?xml version="1.0" standalone="yes"?>
 <svg
     xmlns="http://www.w3.org/2000/svg"
     xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -114,8 +114,10 @@ MONSTER = '''<?xml version="1.0" standalone="yes"?>
 </svg
 >
 '''
+WIDTH_A=417
+HEIGHT_A=476
 
-MONSTER = """<?xml version="1.0" encoding="iso-8859-1"?>
+MONSTER_B = """<?xml version="1.0" encoding="iso-8859-1"?>
 <!-- Generator: Adobe Illustrator 19.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
 <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 	 viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve">
@@ -207,3 +209,6 @@ MONSTER = """<?xml version="1.0" encoding="iso-8859-1"?>
 </g>
 </svg>
 """
+
+WIDTH_B=512
+HEIGHT_B=512

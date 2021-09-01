@@ -14,7 +14,7 @@ class BlobFactory:
     :param cols: The number of columns to be used for plotting the population
     """
 
-    def __init__(self, n=5, scatter=12, export_png=True, cols=None) -> None:
+    def __init__(self, n=5, scatter=12, export_png=True, cols=None, monster="B") -> None:
 
         assert scatter <= 12, ValueError("Scatter cannot be larger than 12")
         self._n = n
@@ -25,6 +25,18 @@ class BlobFactory:
         self._scales = list()
         self._df = None
         self._cols = cols
+
+        assert monster in ["A", "B"], ValueError("Monster can only be A or B")
+        if monster == "A":
+            from const import MONSTER_A, WIDTH_A, HEIGHT_A
+            self._monster = MONSTER_A
+            self._monster_w = WIDTH_A
+            self._monster_h = HEIGHT_A
+        elif monster == "B":
+            from const import MONSTER_B, WIDTH_B, HEIGHT_B
+            self._monster = MONSTER_B
+            self._monster_w = WIDTH_B
+            self._monster_h = HEIGHT_B
 
         from os import mkdir
         from os.path import isdir
@@ -114,7 +126,7 @@ class BlobFactory:
         :param color: The HTML color that the blob should have
         """
 
-        from const import MONSTER, REPLACE_STRING
+        from const import REPLACE_STRING
         from svglib.svglib import svg2rlg
         from reportlab.graphics import renderPM
         from os import remove
@@ -124,7 +136,7 @@ class BlobFactory:
 
         with open(path, "w", encoding="utf8") as temp_file:
             temp_file.write(
-                MONSTER.replace(REPLACE_STRING, color)
+                self._monster.replace(REPLACE_STRING, color)
             )
         
         drawing = svg2rlg(path)
@@ -202,8 +214,8 @@ class BlobFactory:
                 ax[row, col].set_title(name, loc="left")
                 ax[row, col].imshow(image)
                 
-                ax[row, col].set_ylim([512,0])
-                ax[row, col].set_xlim([0,512])
+                ax[row, col].set_ylim([self._monster_w,0])
+                ax[row, col].set_xlim([0,self._monster_w])
                 
                 i += 1
 
