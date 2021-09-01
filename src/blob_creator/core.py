@@ -202,8 +202,8 @@ class BlobFactory:
                 ax[row, col].set_title(name, loc="left")
                 ax[row, col].imshow(image)
                 
-                ax[row, col].set_ylim([476,0])
-                ax[row, col].set_xlim([0,417])
+                ax[row, col].set_ylim([512,0])
+                ax[row, col].set_xlim([0,512])
                 
                 i += 1
 
