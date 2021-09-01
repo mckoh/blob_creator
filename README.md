@@ -1,6 +1,20 @@
 # Blob Dataset Creator
 
-Blobs are little monsters that you can use to demonstrate data analysis procedures. They have a size, a weight, a color and a cuteness level. As you can see, a blob dataset contains all types of variables that you can find in the wild (nominal, ordinal and metric). 
+Blobs are little monsters that you can use to demonstrate data analysis procedures. They have a size, a weight, a color and a cuteness level. As you can see, a blob dataset contains all types of variables that you can find in the wild (nominal, ordinal and metric).
+
+## Generator Output
+
+This generator creates a population of blobs. It delivers (a) an Excel data frame with every blob's properties, (b) a population plot that visualizes all blobs for presentation purposes and (c) a set of visualizations of the population data.
+
+![Dataframe](https://owncloud.fh-kufstein.ac.at/index.php/s/tUSlgP74rTe20JV/download)
+
+The **population plot** displays all blobs with color and size. In addition to that, it shows blob names.
+
+![Blob population](https://owncloud.fh-kufstein.ac.at/index.php/s/3T1tRme3H5YO9pM/download)
+
+The **visualization plot** inklude a histogram of blob size and blob weights, as well as a bar chart with cuteness level counts and a scatter plot of size and weight.
+
+![Blob population analysis](https://owncloud.fh-kufstein.ac.at/index.php/s/3jyvqYHLZbnhre6/download)
 
 ## Use the Generator
 
@@ -9,24 +23,22 @@ Blob populations can either have large (12) or small (1) **variability**, determ
 You can **generate a new population** by calling:
 
 ```python
-from blob_creator.artist import Artist
+from blob_creator.core import BlobFactory
 
 # This instantiates a new blob factory
-a = Artist(n=20, scatter=12, export_png=True)
+blob_factory = BlobFactory(n=20, scatter=12, export_png=True)
 
 # This will create the blobs
-a.create_blobs()
+blob_factory.create_blobs()
 
 # This will export your dataset and your population plot to disk
-a.export_data()
+blob_factory.export_data()
 ```
 
-## Use Generator from Terminal
+## Package Installation
 
-You can also use the Generator from your CLI, calling `main.py` and passing all necessary arguments. The following call will generate a population of 30 blobs with a scattering of 12 and a population plot layout with 10 columns:
+This package can be installed using Python's package index. Use the following command to do this:
 
 ```shell
-python main.py 30 12 10
+pip install blob-creator
 ```
-
->**Note:** This script will not export single blob images as pngs. To do this, you can change the code in [`main.py`](main.py), changing `export_png` from `False` to `True`.

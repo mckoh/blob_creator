@@ -5,16 +5,16 @@ import os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__))))
 from const import COLORS
 
-class Artist:
+class BlobFactory:
+    """BlobFactory class that is used to generate a blob data set.
+    
+    :param n: The size of the dataset
+    :param scatter: The variability of the data that are generated
+    :param export_png: A switch that lets you export the original pngs
+    :param cols: The number of columns to be used for plotting the population
+    """
 
     def __init__(self, n=5, scatter=12, export_png=True, cols=None) -> None:
-        """Artist class that is used to generate a blob data set.
-        
-        :param n: The size of the dataset
-        :param scatter: The variability of the data that are generated
-        :param export_png: A switch that lets you export the original pngs
-        :param cols: The number of columns to be used for plotting the population
-        """
 
         assert scatter <= 12, ValueError("Scatter cannot be larger than 12")
         self._n = n
