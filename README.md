@@ -6,15 +6,15 @@ Blobs are little monsters that you can use to demonstrate data analysis procedur
 
 This generator creates a population of blobs. It delivers (a) an Excel data frame with every blob's properties, (b) a population plot that visualizes all blobs for presentation purposes and (c) a set of visualizations of the population data.
 
-![Dataframe](https://owncloud.fh-kufstein.ac.at/index.php/s/tUSlgP74rTe20JV/download)
+![Dataframe](https://github.com/mckoh/blob_creator/raw/main/static/dataframe.png)
 
 The **population plot** displays all blobs with color and size. In addition to that, it shows blob names.
 
-![Blob population](https://owncloud.fh-kufstein.ac.at/index.php/s/3T1tRme3H5YO9pM/download)
+![Blob population](https://github.com/mckoh/blob_creator/raw/main/static/population.png)
 
 The **visualization plot** inklude a histogram of blob size and blob weights, as well as a bar chart with cuteness level counts and a scatter plot of size and weight.
 
-![Blob population analysis](https://owncloud.fh-kufstein.ac.at/index.php/s/3jyvqYHLZbnhre6/download)
+![Blob population analysis](https://github.com/mckoh/blob_creator/raw/main/static/histograms.png)
 
 ## Use the Generator
 
