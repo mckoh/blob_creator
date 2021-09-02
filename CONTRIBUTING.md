@@ -1,1 +1,1 @@
-Contributions to this project are welcome. If you find a bug or have a feature request, you can go to "Issues" in the main menu. If you would like to advance this code base on your own, you are welcome to fork this project.
+Contributions to this project are welcome. If you find a bug or have a feature request, you can go to "Issues" in the main menu. If you would like to advance this code base on your own, you are welcome to fork this project. The project is issued under the MIT License, allowing you to reuse its code in any possible way.
