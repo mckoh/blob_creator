@@ -12,6 +12,7 @@ class BlobFactory:
     :param scatter: The variability of the data that are generated
     :param export_png: A switch that lets you export the original pngs
     :param cols: The number of columns to be used for plotting the population
+    :param monster: Lets you select a monster template
     """
 
     def __init__(self, n=5, scatter=12, export_png=True, cols=None, monster="B") -> None:
