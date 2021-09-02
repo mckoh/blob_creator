@@ -56,3 +56,43 @@ def test_population_string():
     test_factory = BlobFactory(n=5, scatter=1)
     population_string = test_factory._get_population_str()
     assert population_string == "blob_population_n5_s1", error_message
+
+
+def test_folder_creation():
+    from os.path import isdir
+    error_message = "Data folder has not been created correctly"
+    test_factory = BlobFactory()
+    dir_path = test_factory._get_population_str()
+    assert isdir(dir_path), error_message
+
+
+def test_image_creation():
+    from os import listdir
+    error_message = "Images have not been correctly created"
+    n=7
+    test_factory = BlobFactory(n=n, scatter=2, export_png=True)
+    test_factory.create_blobs()
+    dir_path = test_factory._get_population_str()
+    assert len(listdir(dir_path)) == n, error_message
+
+
+def test_image_keeping():
+    from os import listdir
+    error_message = "Images have not been kept correctly"
+    n=7
+    test_factory = BlobFactory(n=n, scatter=2, export_png=True)
+    test_factory.create_blobs()
+    test_factory.export_data()
+    dir_path = test_factory._get_population_str()
+    assert len(listdir(dir_path)) == n+3, error_message
+
+
+def test_image_deletion():
+    from os import listdir
+    error_message = "Images have not been correctly created"
+    n=7
+    test_factory = BlobFactory(n=n, scatter=2, export_png=False)
+    test_factory.create_blobs()
+    test_factory.export_data()
+    dir_path = test_factory._get_population_str()
+    assert len(listdir(dir_path)) == 3, error_message
