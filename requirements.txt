@@ -1,0 +1,9 @@
+pytest
+openpyxl
+pandas
+numpy
+matplotlib
+Pillow
+names
+svglib
+reportlab
