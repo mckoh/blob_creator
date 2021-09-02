@@ -79,8 +79,8 @@ def test_image_creation():
 def test_image_keeping():
     from os import listdir
     error_message = "Images have not been kept correctly"
-    n=7
-    test_factory = BlobFactory(n=n, scatter=2, export_png=True)
+    n=8
+    test_factory = BlobFactory(n=n, scatter=3, export_png=True)
     test_factory.create_blobs()
     test_factory.export_data()
     dir_path = test_factory._get_population_str()
@@ -90,8 +90,8 @@ def test_image_keeping():
 def test_image_deletion():
     from os import listdir
     error_message = "Images have not been correctly created"
-    n=7
-    test_factory = BlobFactory(n=n, scatter=2, export_png=False)
+    n=9
+    test_factory = BlobFactory(n=n, scatter=4, export_png=False)
     test_factory.create_blobs()
     test_factory.export_data()
     dir_path = test_factory._get_population_str()
