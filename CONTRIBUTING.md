@@ -1,0 +1,1 @@
+Contributions to this project are welcome. If you find a bug or have a feature request, you can go to "Issues" in the main menu. If you would like to advance this code base on your own, you are welcome to fork this project.
