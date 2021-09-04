@@ -8,6 +8,12 @@ from const import COLORS
 class BlobFactory:
     """BlobFactory class that is used to generate a blob data set.
     
+    Blobs are little monsters that are intended to help you  explaining
+    statistical concepts around sampling. A blob population can be large
+    or small. The size is adjustable by the parameter n (default is 5). 
+    You can also adjust the population's variability by adjusting the 
+    parameter scatter (default is 12; possible values are 1 to 12).    
+    
     :param n: The size of the dataset
     :param scatter: The variability of the data that are generated
     :param export_png: A switch that lets you export the original pngs
@@ -18,6 +24,13 @@ class BlobFactory:
     def __init__(self, n=5, scatter=12, export_png=True, cols=None, monster="B") -> None:
 
         assert scatter <= 12, ValueError("Scatter cannot be larger than 12")
+        assert n > 0, ValueError("n must be positive")
+        assert monster in ["A", "B"], ValueError("Monster can only be A or B")
+        assert type(n)==int and type(scatter)==int, ValueError("Cols/n/scatter must be int")
+        if cols:
+            assert cols > 0, ValueError("Cols must be positive")
+            assert type(cols) == int, ValueError("Cols/n/scatter must be int")
+                
         self._n = n
         self._scatter = scatter
         self._export_png = export_png
@@ -27,7 +40,6 @@ class BlobFactory:
         self._df = None
         self._cols = cols
 
-        assert monster in ["A", "B"], ValueError("Monster can only be A or B")
         if monster == "A":
             from const import MONSTER_A, WIDTH_A, HEIGHT_A
             self._monster = MONSTER_A
@@ -45,7 +57,6 @@ class BlobFactory:
         # create repo for new population
         if not isdir(self._get_population_str()):
             mkdir(self._get_population_str())
-
 
     def create_blobs(self) -> None:
         """Can be called to create a random set of blobs."""
@@ -115,7 +126,7 @@ class BlobFactory:
         self._df.index = self._df.name
         self._df.drop("name", axis=1, inplace=True)
 
-    def _get_population_str(self):
+    def _get_population_str(self) -> None:
         """Can be used to generate a population identification string."""
         
         return f"blob_population_n{self._n}_s{self._scatter}"
@@ -227,8 +238,11 @@ class BlobFactory:
         plt.tight_layout()
         plt.savefig(img_name)
 
-    def export_data(self) -> None:
-        """Can be used to export a dataframe with the generated blob specs."""
+    def export_data(self) -> bool:
+        """Can be used to export a dataframe with the generated blob specs.
+        
+        :return: Boolean response
+        """
         
         from os.path import join
 
@@ -243,6 +257,8 @@ class BlobFactory:
         self._plot_data()
         if not self._export_png:
             self._delete_drawings()
+        
+        return True
 
     def _plot_data(self) -> None:
         """Can be used to plot the data using histogram, barchar and scatterplot."""

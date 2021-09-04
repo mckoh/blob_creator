@@ -113,3 +113,56 @@ def test_image_deletion():
     dir_path = test_factory._get_population_str()
     assert len(listdir(dir_path)) == 3, error_message
     rmtree(f"blob_population_n{n}_s4")
+    
+
+def test_negative_n():
+    error_message = "Negative n not correctly detected"
+    with raises(AssertionError):
+        test_factory = BlobFactory(n=-1, scatter=12)
+        assert False, error_message
+
+
+def test_zero_n():
+    error_message = "Zero n not correctly detected"
+    with raises(AssertionError):
+        test_factory = BlobFactory(n=0, scatter=12)
+        assert False, error_message
+        
+
+def test_int_n():
+    error_message = "n must be integer"
+    with raises(AssertionError):
+        test_factory = BlobFactory(n=5.0)
+        assert False, error_message
+  
+        
+def test_int_scatter():
+    error_message = "scatter must be integer"
+    with raises(AssertionError):
+        test_factory = BlobFactory(scatter=12.0)
+        assert False, error_message
+
+
+def test_int_cols():
+    error_message = "cols must be integer"
+    with raises(AssertionError):
+        test_factory = BlobFactory(cols=2.0)
+        assert False, error_message
+
+
+def test_negative_cols():
+    error_message = "cols must be positive"
+    with raises(AssertionError):
+        test_factory = BlobFactory(cols=0)
+        assert False, error_message
+
+
+def test_export_return():
+    from os import listdir
+    error_message = "Export did not return flag"
+    test_factory = BlobFactory(n=5, scatter=4, export_png=False)
+    test_factory.create_blobs()
+    response = test_factory.export_data()
+    dir_path = test_factory._get_population_str()
+    assert type(response) == bool, error_message
+    rmtree(dir_path)
