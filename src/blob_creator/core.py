@@ -59,9 +59,9 @@ class BlobFactory:
         self._n = n
         self._scatter = scatter
         self._export_png = export_png
-        self._blobs = list()
-        self._sizes = list()
-        self._scales = list()
+        self._blobs = []
+        self._sizes = []
+        self._scales = []
         self._df = None
         self._cols = cols
 
