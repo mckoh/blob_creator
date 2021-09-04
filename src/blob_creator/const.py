@@ -1,3 +1,11 @@
+"""
+Constants of Blob-Creator
+
+Author: Michael Kohlegger
+Date: 2021-09
+"""
+
+
 COLORS = [
     ("white", "#97E0F2"),
     ("very light blue", "#0EB3DF"),
@@ -114,8 +122,8 @@ MONSTER_A = '''<?xml version="1.0" standalone="yes"?>
 </svg
 >
 '''
-WIDTH_A=417
-HEIGHT_A=476
+WIDTH_A = 417
+HEIGHT_A = 476
 
 MONSTER_B = """<?xml version="1.0" encoding="iso-8859-1"?>
 <!-- Generator: Adobe Illustrator 19.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
@@ -210,5 +218,5 @@ MONSTER_B = """<?xml version="1.0" encoding="iso-8859-1"?>
 </svg>
 """
 
-WIDTH_B=512
-HEIGHT_B=512
+WIDTH_B = 512
+HEIGHT_B = 512
