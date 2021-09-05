@@ -7,7 +7,7 @@ Date: 2021-09
 
 import sys
 from os import mkdir, remove
-from os.path import isdir, abspath, dirname, join
+from os.path import isdir, dirname, join
 from numpy import ceil
 from numpy.random import normal, randint
 from names import get_first_name
@@ -17,11 +17,10 @@ from reportlab.graphics import renderPM
 from PIL import Image
 from matplotlib import pyplot as plt
 
-sys.path.insert(0, abspath(join(dirname(__file__))))
-from const import REPLACE_STRING
-from const import MONSTER_A, WIDTH_A, HEIGHT_A
-from const import MONSTER_B, WIDTH_B, HEIGHT_B
-from const import COLORS
+from .const import REPLACE_STRING
+from .const import MONSTER_A, WIDTH_A, HEIGHT_A
+from .const import MONSTER_B, WIDTH_B, HEIGHT_B
+from .const import COLORS
 
 class BlobFactory:
     """BlobFactory class that is used to generate a blob data set.
