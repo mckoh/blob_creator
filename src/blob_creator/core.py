@@ -5,9 +5,8 @@ Author: Michael Kohlegger
 Date: 2021-09
 """
 
-import sys
 from os import mkdir, remove
-from os.path import isdir, dirname, join
+from os.path import isdir, join
 from numpy import ceil
 from numpy.random import normal, randint
 from names import get_first_name
@@ -16,7 +15,6 @@ from svglib.svglib import svg2rlg
 from reportlab.graphics import renderPM
 from PIL import Image
 from matplotlib import pyplot as plt
-
 from .const import REPLACE_STRING
 from .const import MONSTER_A, WIDTH_A, HEIGHT_A
 from .const import MONSTER_B, WIDTH_B, HEIGHT_B
