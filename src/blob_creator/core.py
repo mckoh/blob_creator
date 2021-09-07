@@ -5,6 +5,18 @@ Author: Michael Kohlegger
 Date: 2021-09
 """
 
+# ['GTK3Agg', 'GTK3Cairo', 'MacOSX',  'Qt4Agg', 'Qt4Cairo', 'Qt5Agg', 
+# 'Qt5Cairo', 'TkCairo', 'WebAgg', 'WX', 'WXAgg', 'WXCairo', 'agg', 'cairo', 
+# 'pdf', 'pgf', 'ps', 'svg', 'template']
+
+# Tried these with pytest...
+#nbagg
+#agg
+#tkagg
+
+import matplotlib
+matplotlib.use('TkAgg')
+
 from os import mkdir, remove
 from os.path import isdir, join
 from numpy import ceil
