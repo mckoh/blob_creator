@@ -18,6 +18,7 @@ import matplotlib
 matplotlib.use('TkAgg')
 
 from os import mkdir, remove
+from shutil import rmtree
 from os.path import isdir, join
 from numpy import ceil
 from numpy.random import normal, randint
@@ -90,14 +91,13 @@ class BlobFactory:
             self._kind_w = WIDTH_MARSIAN
             self._kind_h = HEIGHT_MARSIAN
 
-        # create repo for new population
-        if not isdir(self._get_population_str()):
-            mkdir(self._get_population_str())
-
     def create_blobs(self) -> None:
         """Can be called to create a random set of blobs."""
 
-        # Reset population completely
+        if isdir(self._get_population_str()):
+            rmtree(self._get_population_str())
+        mkdir(self._get_population_str())
+
         self._population = {
             "names": [],
             "sizes": [],
@@ -199,7 +199,7 @@ class BlobFactory:
     def delete_individual_pngs(self) -> None:
         """Can be called to remove all blob png files saved to disk."""
         if not self._png_created:
-            print("No PNGs to delete.")
+            assert False, "No PNGs to delete."
         else:
             for name in self._population["names"]:
                 remove(join(self._get_population_str(), f"blob_{name}.png"))
