@@ -98,7 +98,7 @@ def test_image_keeping():
     n=8
     test_factory = BlobFactory(n=n, scatter=3)
     test_factory.create_blobs()
-    test_factory.export_data(export_pngs=True)
+    test_factory.export_data()
     dir_path = test_factory._get_population_str()
     assert len(listdir(dir_path)) == n+3, error_message
     rmtree(f"blob_population_n{n}_s3")
