@@ -4,8 +4,8 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name='blob_creator',  
-    version='2.5',
+    name='blob_creator',
+    version='2.7',
     author="Michael Kohlegger",
     author_email="michael@datenberge.org",
     description="Package to create dummy datasets for analysis tasks",
@@ -31,6 +31,6 @@ setuptools.setup(
         "Pillow",
         "names",
         "svglib",
-        "reportlab==3.5.68"
+        "reportlab"
     ]
  )

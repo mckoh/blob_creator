@@ -21,6 +21,8 @@ from .const import ALIEN, WIDTH_ALIEN, HEIGHT_ALIEN
 from .const import BOY, WIDTH_BOY, HEIGHT_BOY
 from .const import MARSIAN, WIDTH_MARSIAN, HEIGHT_MARSIAN
 from .const import COLORS
+from .functions import dictionary_filter
+
 
 class BlobFactory:
     """BlobFactory class that is used to generate a blob data set.
@@ -54,11 +56,13 @@ class BlobFactory:
         self._n = n
         self._scatter = scatter
         self._population = {
-            "blobs": [],
+            "names": [],
             "sizes": [],
-            "scales": []
+            "weights": [],
+            "colors": [],
+            "cuteness_levels": [],
+            "scales": [],
         }
-        self._df = None
 
         if kind == "alien":
             self._kind = ALIEN
@@ -121,11 +125,12 @@ class BlobFactory:
 
             cuteness = randint(low=1, high=6)
             name = get_first_name() + " " + str(i)
-
-            # save the blob
-            blob = (name, size, weight, color_string, cuteness)
-            self._population["blobs"].append(blob)
+            
+            self._population["names"].append(name)
             self._population["sizes"].append(size)
+            self._population["weights"].append(weight)
+            self._population["colors"].append(color_string)
+            self._population["cuteness_levels"].append(cuteness)
 
             # draw the blob
             self._draw_blob(color=color_html, filename=f"blob_{name}")
@@ -133,19 +138,19 @@ class BlobFactory:
         # resize the blob images according to blob size
         self._size_drawings()
 
-        # create a blob dataframe
-        self._df = DataFrame(
-            self._population["blobs"],
-            columns=[
-                "name",
-                "size",
-                "weight",
-                "color",
-                "cuteness"
-            ]
+    def _create_dataframe(self) -> DataFrame:
+        """Can be used to return a dataframe of the population"""
+        
+        data = dictionary_filter(
+            self._population,
+            ["names", "sizes", "weights", "colors", "cuteness_levels"]
         )
-        self._df.index = self._df.name
-        self._df.drop("name", axis=1, inplace=True)
+
+        df = DataFrame(data)
+        df.index = df["names"]
+        df.drop("names", axis=1, inplace=True)
+
+        return df
 
     def _get_population_str(self) -> None:
         """Can be used to generate a population string."""
@@ -178,8 +183,7 @@ class BlobFactory:
     def delete_individual_pngs(self) -> None:
         """Can be called to remove all blob png files saved to disk."""
 
-        for blob in self._population["blobs"]:
-            name = blob[0]
+        for name in self._population["names"]:
             remove(join(self._get_population_str(), f"blob_{name}.png"))
 
     def _size_drawings(self) -> None:
@@ -190,10 +194,10 @@ class BlobFactory:
         for size in self._population["sizes"]:
             self._population["scales"].append(size/max_size)
 
-        for i, blob in enumerate(self._population["blobs"]):
+        for i, name in enumerate(self._population["names"]):
             img_name = join(
                 self._get_population_str(),
-                f"blob_{blob[0]}.png"
+                f"blob_{name}.png"
             )
             image = Image.open(img_name)
             width, height = image.size
@@ -211,7 +215,7 @@ class BlobFactory:
         if not cols:
             cols = max(int(self._n/5), 2)
 
-        nrows = int(ceil(len(self._population["blobs"])/cols))
+        nrows = int(ceil(len(self._population["names"])/cols))
 
         _, axis = plt.subplots(
             ncols=cols,
@@ -224,10 +228,9 @@ class BlobFactory:
         i = 0
         for col in range(cols):
             for row in range(nrows):
-                if i == len(self._population["blobs"]):
+                if i == len(self._population["names"]):
                     break
-                blob = self._population["blobs"][i]
-                name = blob[0]
+                name = self._population["names"][i]
                 img_path = join(
                     self._get_population_str(),
                     f"blob_{name}.png"
@@ -255,7 +258,8 @@ class BlobFactory:
             assert cols > 0, "Cols must be positive"
             assert isinstance(cols, int), "Cols must be int"
 
-        self._df.to_excel(
+        df = self._create_dataframe()
+        df.to_excel(
             join(self._get_population_str(), "population.xlsx")
         )
 
@@ -272,30 +276,32 @@ class BlobFactory:
 
         fig, axis = plt.subplots(nrows=1, ncols=4, figsize=(20, 5))
 
-        axis[0].hist(self._df["size"], label="data", color="k", bins=7)
-        axis[1].hist(self._df["weight"], label="data", color="k", bins=7)
+        df = self._create_dataframe()
+
+        axis[0].hist(df["sizes"], label="data", color="k", bins=7)
+        axis[1].hist(df["weights"], label="data", color="k", bins=7)
         axis[2].bar(
-            height=self._df["cuteness"].value_counts().values,
-            x=self._df["cuteness"].value_counts().index,
+            height=df["cuteness_levels"].value_counts().values,
+            x=df["cuteness_levels"].value_counts().index,
             label="data",
             color="k"
         )
         axis[3].scatter(
-            x=self._df["size"],
-            y=self._df["weight"],
+            x=df["sizes"],
+            y=df["weights"],
             label="data",
             color="k"
         )
 
         axis[0].plot(
-            [self._df["size"].mean()],
+            [df["sizes"].mean()],
             [0.2],
             "vr",
             markersize=15,
             label="mean"
         )
         axis[1].plot(
-            [self._df["weight"].mean()],
+            [df["weights"].mean()],
             [0.2],
             "vr",
             markersize=15,
@@ -303,7 +309,7 @@ class BlobFactory:
         )
 
         axis[0].plot(
-            [self._df["size"].median()],
+            [df["sizes"].median()],
             [0.2],
             "v",
             color="orange",
@@ -312,7 +318,7 @@ class BlobFactory:
         )
 
         axis[1].plot(
-            [self._df["weight"].median()],
+            [df["weights"].median()],
             [0.2],
             "v",
             color="orange",
@@ -321,7 +327,7 @@ class BlobFactory:
         )
 
         axis[2].plot(
-            [self._df["cuteness"].median()],
+            [df["cuteness_levels"].median()],
             [0.2],
             "v",
             color="orange",
