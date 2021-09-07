@@ -161,3 +161,13 @@ def test_negative_cols():
         test_factory.create_blobs()
         test_factory.export_data(cols=0)
         assert False, error_message
+
+
+def test_export_only_with_png():
+    #TODO
+    pass
+
+
+def test_delete_only_with_png():
+    #TODO
+    pass
