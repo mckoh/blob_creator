@@ -55,14 +55,7 @@ class BlobFactory:
 
         self._n = n
         self._scatter = scatter
-        self._population = {
-            "names": [],
-            "sizes": [],
-            "weights": [],
-            "colors": [],
-            "cuteness_levels": [],
-            "scales": [],
-        }
+        self._population = None
         self._png_created = False
 
         if kind == "alien":
@@ -91,6 +84,16 @@ class BlobFactory:
 
     def create_blobs(self) -> None:
         """Can be called to create a random set of blobs."""
+
+        # Reset population completely
+        self._population = {
+            "names": [],
+            "sizes": [],
+            "weights": [],
+            "colors": [],
+            "cuteness_levels": [],
+            "scales": [],
+        }
 
         for i in range(self._n):
 
