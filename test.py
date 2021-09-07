@@ -4,7 +4,9 @@ from src.blob_creator.core import BlobFactory
 from pytest import raises
 from shutil import rmtree
 from pytest import mark
+from matplotlib import use
 
+use("agg")
 
 @mark.my_own
 def test_n():
@@ -231,3 +233,12 @@ def test_reset_population_dir_on_recreation():
     count = len(listdir(test_factory._get_population_str()))
     rmtree(f"blob_population_n{n}_s12")
     assert count==n, error_message
+
+
+@mark.my_own
+def test_no_exort_before_creation():
+    error_message = "Population must be created before export"
+    with raises(AssertionError):
+        test_factory = BlobFactory(n=5, scatter=12)
+        test_factory.export_data()
+        assert False, error_message
