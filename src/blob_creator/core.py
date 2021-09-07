@@ -41,28 +41,24 @@ class BlobFactory:
     def __init__(self,
                  n=5,
                  scatter=12,
-                 export_png=True,
-                 cols=None,
                  kind="alien") -> None:
+
+        allowed = ["alien", "monster", "boy", "marsian"]
 
         assert scatter <= 12, "Scatter cannot be larger than 12"
         assert n > 0, "n must be positive"
-        assert kind in ["alien", "monster", "boy", "marsian"], "Kind can only be alien/monster/boy/marsian"
+        assert kind in allowed, "Kind can only be " + "/".join(allowed)
         assert isinstance(n, int), "n must be int"
         assert isinstance(scatter, int), "scatter must be int"
 
-        if cols:
-            assert cols > 0, "Cols must be positive"
-            assert isinstance(cols, int), "Cols must be int"
-
         self._n = n
         self._scatter = scatter
-        self._export_png = export_png
-        self._blobs = []
-        self._sizes = []
-        self._scales = []
+        self._population = {
+            "blobs": [],
+            "sizes": [],
+            "scales": []
+        }
         self._df = None
-        self._cols = cols
 
         if kind == "alien":
             self._kind = ALIEN
@@ -128,8 +124,8 @@ class BlobFactory:
 
             # save the blob
             blob = (name, size, weight, color_string, cuteness)
-            self._blobs.append(blob)
-            self._sizes.append(size)
+            self._population["blobs"].append(blob)
+            self._population["sizes"].append(size)
 
             # draw the blob
             self._draw_blob(color=color_html, filename=f"blob_{name}")
@@ -139,7 +135,7 @@ class BlobFactory:
 
         # create a blob dataframe
         self._df = DataFrame(
-            self._blobs,
+            self._population["blobs"],
             columns=[
                 "name",
                 "size",
@@ -182,57 +178,55 @@ class BlobFactory:
     def _delete_drawings(self) -> None:
         """Can be called to remove all blob png files saved to disk."""
 
-        for blob in self._blobs:
+        for blob in self._population["blobs"]:
             name = blob[0]
             remove(join(self._get_population_str(), f"blob_{name}.png"))
 
     def _size_drawings(self) -> None:
         """Is used to scale the size of the temporary png images"""
 
-        max_size = max(self._sizes)
+        max_size = max(self._population["sizes"])
 
-        for size in self._sizes:
-            self._scales.append(size/max_size)
+        for size in self._population["sizes"]:
+            self._population["scales"].append(size/max_size)
 
-        for i, blob in enumerate(self._blobs):
+        for i, blob in enumerate(self._population["blobs"]):
             img_name = join(
                 self._get_population_str(),
                 f"blob_{blob[0]}.png"
             )
             image = Image.open(img_name)
             width, height = image.size
-            width = int(width*self._scales[i])
-            height = int(height*self._scales[i])
+            width = int(width*self._population["scales"][i])
+            height = int(height*self._population["scales"][i])
             image = image.resize((width, height), Image.ANTIALIAS)
             image.save(fp=img_name)
 
-    def _plot_population(self, img_name) -> None:
+    def _plot_population(self, img_name, cols) -> None:
         """Can be used to plot a population chart
 
         :param img_name: The name of the final image saved
         """
 
-        if not self._cols:
-            ncols = max(int(self._n/8), 2)
-        else:
-            ncols = self._cols
+        if not cols:
+            cols = max(int(self._n/5), 2)
 
-        nrows = int(ceil(len(self._blobs)/ncols))
+        nrows = int(ceil(len(self._population["blobs"])/cols))
 
         _, axis = plt.subplots(
-            ncols=ncols,
+            ncols=cols,
             nrows=nrows,
-            figsize=(15, 15*nrows/ncols),
+            figsize=(15, 15*nrows/cols),
             sharex=True,
             sharey=True
         )
 
         i = 0
-        for col in range(ncols):
+        for col in range(cols):
             for row in range(nrows):
-                if i == len(self._blobs):
+                if i == len(self._population["blobs"]):
                     break
-                blob = self._blobs[i]
+                blob = self._population["blobs"][i]
                 name = blob[0]
                 img_path = join(
                     self._get_population_str(),
@@ -247,18 +241,22 @@ class BlobFactory:
 
                 i += 1
 
-        for col in range(ncols):
+        for col in range(cols):
             for row in range(nrows):
                 axis[row, col].axis('off')
 
         plt.tight_layout()
         plt.savefig(img_name)
 
-    def export_data(self) -> bool:
+    def export_data(self, cols, export_pngs=False,) -> bool:
         """Can be used to export a dataframe with blob specs.
 
         :return: Boolean response
         """
+
+        if cols:
+            assert cols > 0, "Cols must be positive"
+            assert isinstance(cols, int), "Cols must be int"
 
         self._df.to_excel(
             join(self._get_population_str(), "population.xlsx")
@@ -266,14 +264,13 @@ class BlobFactory:
 
         img_name = join(
             self._get_population_str(),
-            #TODO: This is just a quick fix
-            #"population.png"
-            "population.pdf"
+            "population.png"
         )
 
-        self._plot_population(img_name=img_name)
+        self._plot_population(img_name=img_name, cols=cols)
         self._plot_data()
-        if not self._export_png:
+
+        if not export_pngs:
             self._delete_drawings()
 
         return True
