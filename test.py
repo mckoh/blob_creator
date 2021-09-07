@@ -135,7 +135,7 @@ def test_int_n():
         assert False, error_message
 
 
-    def test_int_scatter():
+def test_int_scatter():
     error_message = "scatter must be integer"
     with raises(AssertionError):
         test_factory = BlobFactory(scatter=12.0)
