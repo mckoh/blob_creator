@@ -5,20 +5,8 @@ Author: Michael Kohlegger
 Date: 2021-09
 """
 
-# ['GTK3Agg', 'GTK3Cairo', 'MacOSX',  'Qt4Agg', 'Qt4Cairo', 'Qt5Agg', 
-# 'Qt5Cairo', 'TkCairo', 'WebAgg', 'WX', 'WXAgg', 'WXCairo', 'agg', 'cairo', 
-# 'pdf', 'pgf', 'ps', 'svg', 'template']
-
-# Tried these with pytest...
-#nbagg
-#agg
-#tkagg
-
-import matplotlib
-matplotlib.use('TkAgg')
-
-from os import mkdir, remove
 from shutil import rmtree
+from os import mkdir, remove
 from os.path import isdir, join
 from numpy import ceil
 from numpy.random import normal, randint
@@ -141,7 +129,7 @@ class BlobFactory:
 
             cuteness = randint(low=1, high=6)
             name = get_first_name() + " " + str(i)
-            
+
             self._population["names"].append(name)
             self._population["sizes"].append(size)
             self._population["weights"].append(weight)
@@ -151,22 +139,22 @@ class BlobFactory:
             self._draw_blob(color=color_html, filename=f"blob_{name}")
 
         self._size_drawings()
-        
+
         self._png_created = True
 
     def _create_dataframe(self) -> DataFrame:
         """Can be used to return a dataframe of the population"""
-        
+
         data = dictionary_filter(
             self._population,
             ["names", "sizes", "weights", "colors", "cuteness_levels"]
         )
 
-        df = DataFrame(data)
-        df.index = df["names"]
-        df.drop("names", axis=1, inplace=True)
+        dataframe = DataFrame(data)
+        dataframe.index = dataframe["names"]
+        dataframe.drop("names", axis=1, inplace=True)
 
-        return df
+        return dataframe
 
     def _get_population_str(self) -> None:
         """Can be used to generate a population string."""
@@ -280,8 +268,8 @@ class BlobFactory:
                 assert cols > 0, "Cols must be positive"
                 assert isinstance(cols, int), "Cols must be int"
 
-            df = self._create_dataframe()
-            df.to_excel(
+            dataframe = self._create_dataframe()
+            dataframe.to_excel(
                 join(self._get_population_str(), "population.xlsx")
             )
 
@@ -298,32 +286,32 @@ class BlobFactory:
 
         fig, axis = plt.subplots(nrows=1, ncols=4, figsize=(20, 5))
 
-        df = self._create_dataframe()
+        dataframe = self._create_dataframe()
 
-        axis[0].hist(df["sizes"], label="data", color="k", bins=7)
-        axis[1].hist(df["weights"], label="data", color="k", bins=7)
+        axis[0].hist(dataframe["sizes"], label="data", color="k", bins=7)
+        axis[1].hist(dataframe["weights"], label="data", color="k", bins=7)
         axis[2].bar(
-            height=df["cuteness_levels"].value_counts().values,
-            x=df["cuteness_levels"].value_counts().index,
+            height=dataframe["cuteness_levels"].value_counts().values,
+            x=dataframe["cuteness_levels"].value_counts().index,
             label="data",
             color="k"
         )
         axis[3].scatter(
-            x=df["sizes"],
-            y=df["weights"],
+            x=dataframe["sizes"],
+            y=dataframe["weights"],
             label="data",
             color="k"
         )
 
         axis[0].plot(
-            [df["sizes"].mean()],
+            [dataframe["sizes"].mean()],
             [0.2],
             "vr",
             markersize=15,
             label="mean"
         )
         axis[1].plot(
-            [df["weights"].mean()],
+            [dataframe["weights"].mean()],
             [0.2],
             "vr",
             markersize=15,
@@ -331,7 +319,7 @@ class BlobFactory:
         )
 
         axis[0].plot(
-            [df["sizes"].median()],
+            [dataframe["sizes"].median()],
             [0.2],
             "v",
             color="orange",
@@ -340,7 +328,7 @@ class BlobFactory:
         )
 
         axis[1].plot(
-            [df["weights"].median()],
+            [dataframe["weights"].median()],
             [0.2],
             "v",
             color="orange",
@@ -349,7 +337,7 @@ class BlobFactory:
         )
 
         axis[2].plot(
-            [df["cuteness_levels"].median()],
+            [dataframe["cuteness_levels"].median()],
             [0.2],
             "v",
             color="orange",
