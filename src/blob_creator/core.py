@@ -175,7 +175,7 @@ class BlobFactory:
 
         remove(path)
 
-    def _delete_drawings(self) -> None:
+    def delete_individual_pngs(self) -> None:
         """Can be called to remove all blob png files saved to disk."""
 
         for blob in self._population["blobs"]:
@@ -248,7 +248,7 @@ class BlobFactory:
         plt.tight_layout()
         plt.savefig(img_name)
 
-    def export_data(self, cols=None, export_pngs=False,) -> bool:
+    def export_data(self, cols=None) -> bool:
         """Can be used to export a dataframe with blob specs."""
 
         if cols:
@@ -266,9 +266,6 @@ class BlobFactory:
 
         self._plot_population(img_name=img_name, cols=cols)
         self._plot_data()
-
-        if not export_pngs:
-            self._delete_drawings()
 
     def _plot_data(self) -> None:
         """Can be used to plot the data."""

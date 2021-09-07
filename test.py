@@ -110,7 +110,8 @@ def test_image_deletion():
     n=9
     test_factory = BlobFactory(n=n, scatter=4)
     test_factory.create_blobs()
-    test_factory.export_data(export_pngs=False)
+    test_factory.export_data()
+    test_factory.delete_individual_pngs()
     dir_path = test_factory._get_population_str()
     assert len(listdir(dir_path)) == 3, error_message
     rmtree(f"blob_population_n{n}_s4")
