@@ -83,7 +83,7 @@ def test_image_creation():
     from os import listdir
     error_message = "Images have not been correctly created"
     n=7
-    test_factory = BlobFactory(n=n, scatter=2, export_png=True)
+    test_factory = BlobFactory(n=n, scatter=2)
     test_factory.create_blobs()
     dir_path = test_factory._get_population_str()
     assert len(listdir(dir_path)) == n, error_message
@@ -94,9 +94,9 @@ def test_image_keeping():
     from os import listdir
     error_message = "Images have not been kept correctly"
     n=8
-    test_factory = BlobFactory(n=n, scatter=3, export_png=True)
+    test_factory = BlobFactory(n=n, scatter=3)
     test_factory.create_blobs()
-    test_factory.export_data()
+    test_factory.export_data(export_pngs=True)
     dir_path = test_factory._get_population_str()
     assert len(listdir(dir_path)) == n+3, error_message
     rmtree(f"blob_population_n{n}_s3")
@@ -106,9 +106,9 @@ def test_image_deletion():
     from os import listdir
     error_message = "Images have not been correctly created"
     n=9
-    test_factory = BlobFactory(n=n, scatter=4, export_png=False)
+    test_factory = BlobFactory(n=n, scatter=4)
     test_factory.create_blobs()
-    test_factory.export_data()
+    test_factory.export_data(export_pngs=False)
     dir_path = test_factory._get_population_str()
     assert len(listdir(dir_path)) == 3, error_message
     rmtree(f"blob_population_n{n}_s4")
@@ -159,9 +159,9 @@ def test_negative_cols():
 def test_export_return():
     from os import listdir
     error_message = "Export did not return flag"
-    test_factory = BlobFactory(n=5, scatter=4, export_png=False)
+    test_factory = BlobFactory(n=5, scatter=4)
     test_factory.create_blobs()
-    response = test_factory.export_data()
+    response = test_factory.export_data(export_pngs=False)
     dir_path = test_factory._get_population_str()
     assert type(response) == bool, error_message
     rmtree(dir_path)
