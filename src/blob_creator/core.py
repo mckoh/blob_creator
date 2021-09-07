@@ -249,10 +249,7 @@ class BlobFactory:
         plt.savefig(img_name)
 
     def export_data(self, cols=None, export_pngs=False,) -> bool:
-        """Can be used to export a dataframe with blob specs.
-
-        :return: Boolean response
-        """
+        """Can be used to export a dataframe with blob specs."""
 
         if cols:
             assert cols > 0, "Cols must be positive"
@@ -272,8 +269,6 @@ class BlobFactory:
 
         if not export_pngs:
             self._delete_drawings()
-
-        return True
 
     def _plot_data(self) -> None:
         """Can be used to plot the data."""

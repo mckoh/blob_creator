@@ -160,14 +160,3 @@ def test_negative_cols():
         test_factory.create_blobs()
         test_factory.export_data(cols=0)
         assert False, error_message
-
-
-def test_export_return():
-    from os import listdir
-    error_message = "Export did not return flag"
-    test_factory = BlobFactory(n=5, scatter=4)
-    test_factory.create_blobs()
-    response = test_factory.export_data(export_pngs=False)
-    dir_path = test_factory._get_population_str()
-    assert type(response) == bool, error_message
-    rmtree(dir_path)
