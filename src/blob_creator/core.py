@@ -212,8 +212,8 @@ class BlobFactory:
             )
             image = Image.open(img_name)
             width, height = image.size
-            width = int(width*self._population["scales"][i])
-            height = int(height*self._population["scales"][i])
+            width = max(int(width*self._population["scales"][i]), 1)
+            height = max(int(height*self._population["scales"][i]), 1)
             image = image.resize((width, height), Image.ANTIALIAS)
             image.save(fp=img_name)
 
