@@ -10,7 +10,6 @@ jobs:
   lint_with_pylint:
 
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python 3.9
@@ -28,8 +27,8 @@ jobs:
 
   test_with_pytest:
 
+    needs: lint_with_pylint
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python 3.9
@@ -47,8 +46,8 @@ jobs:
 
   publish_to_pypi:
 
+    needs: test_with_pytest
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python 3.9
