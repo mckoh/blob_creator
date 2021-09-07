@@ -16,8 +16,10 @@ from reportlab.graphics import renderPM
 from PIL import Image
 from matplotlib import pyplot as plt
 from .const import REPLACE_STRING
-from .const import MONSTER_A, WIDTH_A, HEIGHT_A
-from .const import MONSTER_B, WIDTH_B, HEIGHT_B
+from .const import MONSTER, WIDTH_MONSTER, HEIGHT_MONSTER
+from .const import ALIEN, WIDTH_ALIEN, HEIGHT_ALIEN
+from .const import BOY, WIDTH_BOY, HEIGHT_BOY
+from .const import MARSIAN, WIDTH_MARSIAN, HEIGHT_MARSIAN
 from .const import COLORS
 
 class BlobFactory:
@@ -41,11 +43,11 @@ class BlobFactory:
                  scatter=12,
                  export_png=True,
                  cols=None,
-                 monster="B") -> None:
+                 kind="alien") -> None:
 
         assert scatter <= 12, "Scatter cannot be larger than 12"
         assert n > 0, "n must be positive"
-        assert monster in ["A", "B"], "Monster can only be A or B"
+        assert kind in ["alien", "monster", "boy", "marsian"], "Kind can only be alien/monster/boy/marsian"
         assert isinstance(n, int), "n must be int"
         assert isinstance(scatter, int), "scatter must be int"
 
@@ -62,15 +64,25 @@ class BlobFactory:
         self._df = None
         self._cols = cols
 
-        if monster == "A":
-            self._monster = MONSTER_A
-            self._monster_w = WIDTH_A
-            self._monster_h = HEIGHT_A
+        if kind == "alien":
+            self._kind = ALIEN
+            self._kind_w = WIDTH_ALIEN
+            self._kind_h = HEIGHT_ALIEN
 
-        elif monster == "B":
-            self._monster = MONSTER_B
-            self._monster_w = WIDTH_B
-            self._monster_h = HEIGHT_B
+        elif kind == "monster":
+            self._kind = MONSTER
+            self._kind_w = WIDTH_MONSTER
+            self._kind_h = HEIGHT_MONSTER
+
+        elif kind == "boy":
+            self._kind = BOY
+            self._kind_w = WIDTH_BOY
+            self._kind_h = HEIGHT_BOY
+
+        elif kind == "marsian":
+            self._kind = MARSIAN
+            self._kind_w = WIDTH_MARSIAN
+            self._kind_h = HEIGHT_MARSIAN
 
         # create repo for new population
         if not isdir(self._get_population_str()):
@@ -155,7 +167,7 @@ class BlobFactory:
 
         with open(path, "w", encoding="utf8") as temp_file:
             temp_file.write(
-                self._monster.replace(REPLACE_STRING, color)
+                self._kind.replace(REPLACE_STRING, color)
             )
 
         drawing = svg2rlg(path)
@@ -230,8 +242,8 @@ class BlobFactory:
                 axis[row, col].set_title(name, loc="left")
                 axis[row, col].imshow(image)
 
-                axis[row, col].set_ylim([self._monster_h, 0])
-                axis[row, col].set_xlim([0, self._monster_w])
+                axis[row, col].set_ylim([self._kind_h, 0])
+                axis[row, col].set_xlim([0, self._kind_w])
 
                 i += 1
 
@@ -254,7 +266,9 @@ class BlobFactory:
 
         img_name = join(
             self._get_population_str(),
-            "population.png"
+            #TODO: This is just a quick fix
+            #"population.png"
+            "population.pdf"
         )
 
         self._plot_population(img_name=img_name)

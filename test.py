@@ -12,11 +12,9 @@ def test_n():
     assert test_factory._n == 13, error_message
     rmtree("blob_population_n12_s12")
     rmtree("blob_population_n13_s12")
-    
 
 def test_scatter():
     error_message = "scatter was not correctly storeds"
-    
     for s in range(1,13):
         try:
             test_factory = BlobFactory(n=5, scatter=s)
@@ -24,16 +22,20 @@ def test_scatter():
         except ValueError:
             assert False, error_message
         rmtree(f"blob_population_n5_s{s}")
-        
-
-
+    
 def test_img_dims():
     error_message = "Blob image width/height not correct"
-    test_factory = BlobFactory(n=5, scatter=3, monster="B")
-    assert test_factory._monster_w == 512 and test_factory._monster_h ==512, error_message
+    test_factory = BlobFactory(n=5, scatter=3, kind="monster")
+    assert test_factory._kind_w == 512 and test_factory._kind_h == 512, error_message
     rmtree(f"blob_population_n5_s3")
-    test_factory = BlobFactory(n=5, scatter=3, monster="A")
-    assert test_factory._monster_w == 417 and test_factory._monster_h ==476, error_message
+    test_factory = BlobFactory(n=5, scatter=3, kind="alien")
+    assert test_factory._kind_w == 417 and test_factory._kind_h == 476, error_message
+    rmtree(f"blob_population_n5_s3")
+    test_factory = BlobFactory(n=5, scatter=3, kind="boy")
+    assert test_factory._kind_w == 600 and test_factory._kind_h == 600, error_message
+    rmtree(f"blob_population_n5_s3")
+    test_factory = BlobFactory(n=5, scatter=3, kind="marsian")
+    assert test_factory._kind_w == 600 and test_factory._kind_h == 600, error_message
     rmtree(f"blob_population_n5_s3")
 
 
@@ -43,7 +45,6 @@ def test_monster_type():
         test_factory = BlobFactory(n=5, scatter=3, monster="C")
         rmtree(f"blob_population_n5_s3")
         assert False, error_message
-    
 
 
 def test_scatter_range_low():
@@ -52,16 +53,14 @@ def test_scatter_range_low():
         test_factory = BlobFactory(n=5, scatter=0)
         rmtree(f"blob_population_n5_s0")
         assert False, error_message
-    
-    
-    
+
+
 def test_scatter_range_high():
     error_message = "Factory allowed too large scatter range"
     with raises(AssertionError):
         test_factory = BlobFactory(n=5, scatter=13)
         rmtree(f"blob_population_n5_s13")
         assert False, error_message
-        
 
 
 def test_population_string():
@@ -113,7 +112,7 @@ def test_image_deletion():
     dir_path = test_factory._get_population_str()
     assert len(listdir(dir_path)) == 3, error_message
     rmtree(f"blob_population_n{n}_s4")
-    
+
 
 def test_negative_n():
     error_message = "Negative n not correctly detected"
@@ -127,16 +126,16 @@ def test_zero_n():
     with raises(AssertionError):
         test_factory = BlobFactory(n=0, scatter=12)
         assert False, error_message
-        
+
 
 def test_int_n():
     error_message = "n must be integer"
     with raises(AssertionError):
         test_factory = BlobFactory(n=5.0)
         assert False, error_message
-  
-        
-def test_int_scatter():
+
+
+    def test_int_scatter():
     error_message = "scatter must be integer"
     with raises(AssertionError):
         test_factory = BlobFactory(scatter=12.0)
