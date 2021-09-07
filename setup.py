@@ -31,6 +31,6 @@ setuptools.setup(
         "Pillow",
         "names",
         "svglib",
-        "reportlab"
+        "reportlab==3.5.68"
     ]
  )
