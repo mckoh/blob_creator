@@ -42,7 +42,7 @@ def test_img_dims():
 def test_monster_type():
     error_message = "Monster Type C was allowed though it is not supported"
     with raises(AssertionError):
-        test_factory = BlobFactory(n=5, scatter=3, monster="C")
+        test_factory = BlobFactory(n=5, scatter=3, kind="C")
         rmtree(f"blob_population_n5_s3")
         assert False, error_message
 
