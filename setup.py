@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name='blob_creator',
-    version='2.7',
+    version='2.8',
     author="Michael Kohlegger",
     author_email="michael@datenberge.org",
     description="Package to create dummy datasets for analysis tasks",

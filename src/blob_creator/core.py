@@ -63,6 +63,7 @@ class BlobFactory:
             "cuteness_levels": [],
             "scales": [],
         }
+        self._png_created = False
 
         if kind == "alien":
             self._kind = ALIEN
@@ -132,11 +133,11 @@ class BlobFactory:
             self._population["colors"].append(color_string)
             self._population["cuteness_levels"].append(cuteness)
 
-            # draw the blob
             self._draw_blob(color=color_html, filename=f"blob_{name}")
 
-        # resize the blob images according to blob size
         self._size_drawings()
+        
+        self._png_created = True
 
     def _create_dataframe(self) -> DataFrame:
         """Can be used to return a dataframe of the population"""
@@ -182,9 +183,12 @@ class BlobFactory:
 
     def delete_individual_pngs(self) -> None:
         """Can be called to remove all blob png files saved to disk."""
-
-        for name in self._population["names"]:
-            remove(join(self._get_population_str(), f"blob_{name}.png"))
+        if not self._png_created:
+            print("No PNGs to delete.")
+        else:
+            for name in self._population["names"]:
+                remove(join(self._get_population_str(), f"blob_{name}.png"))
+            self._png_created = False
 
     def _size_drawings(self) -> None:
         """Is used to scale the size of the temporary png images"""
@@ -254,22 +258,25 @@ class BlobFactory:
     def export_data(self, cols=None) -> bool:
         """Can be used to export a dataframe with blob specs."""
 
-        if cols:
-            assert cols > 0, "Cols must be positive"
-            assert isinstance(cols, int), "Cols must be int"
+        if not self._png_created:
+            print("No PNGs created")
+        else:
+            if cols:
+                assert cols > 0, "Cols must be positive"
+                assert isinstance(cols, int), "Cols must be int"
 
-        df = self._create_dataframe()
-        df.to_excel(
-            join(self._get_population_str(), "population.xlsx")
-        )
+            df = self._create_dataframe()
+            df.to_excel(
+                join(self._get_population_str(), "population.xlsx")
+            )
 
-        img_name = join(
-            self._get_population_str(),
-            "population.png"
-        )
+            img_name = join(
+                self._get_population_str(),
+                "population.png"
+            )
 
-        self._plot_population(img_name=img_name, cols=cols)
-        self._plot_data()
+            self._plot_population(img_name=img_name, cols=cols)
+            self._plot_data()
 
     def _plot_data(self) -> None:
         """Can be used to plot the data."""
