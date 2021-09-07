@@ -248,7 +248,7 @@ class BlobFactory:
         plt.tight_layout()
         plt.savefig(img_name)
 
-    def export_data(self, cols, export_pngs=False,) -> bool:
+    def export_data(self, cols=None, export_pngs=False,) -> bool:
         """Can be used to export a dataframe with blob specs.
 
         :return: Boolean response

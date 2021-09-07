@@ -1,4 +1,6 @@
 from os import error, removedirs, scandir
+
+from reportlab.graphics.shapes import test
 from src.blob_creator.core import BlobFactory
 from pytest import raises
 from shutil import rmtree
@@ -145,14 +147,18 @@ def test_int_scatter():
 def test_int_cols():
     error_message = "cols must be integer"
     with raises(AssertionError):
-        test_factory = BlobFactory(cols=2.0)
+        test_factory = BlobFactory()
+        test_factory.create_blobs()
+        test_factory.export_data(cols=2.0)
         assert False, error_message
 
 
 def test_negative_cols():
     error_message = "cols must be positive"
     with raises(AssertionError):
-        test_factory = BlobFactory(cols=0)
+        test_factory = BlobFactory()
+        test_factory.create_blobs()
+        test_factory.export_data(cols=0)
         assert False, error_message
 
 
