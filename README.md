@@ -1,6 +1,6 @@
 # Blob Dataset Creator
 
-[![Publish to PyPI](https://github.com/mckoh/blob_creator/actions/workflows/pypi.yml/badge.svg)](https://github.com/mckoh/blob_creator/actions/workflows/pypi.yml)
+[![Publish to PyPI](https://github.com/mckoh/blob_creator/actions/workflows/pypi.yml/badge.svg)](https://github.com/mckoh/blob_creator/actions/workflows/pypi.yml) [![Lint with PyLint](https://github.com/mckoh/blob_creator/actions/workflows/pylint.yml/badge.svg)](https://github.com/mckoh/blob_creator/actions/workflows/pylint.yml) [![Test with Pytest](https://github.com/mckoh/blob_creator/actions/workflows/pytest.yml/badge.svg)](https://github.com/mckoh/blob_creator/actions/workflows/pytest.yml)
 
 Blobs are little monsters that you can use to demonstrate data analysis procedures. They have a size, a weight, a color and a cuteness level. As you can see, a blob dataset contains all types of variables that you can find in the wild (nominal, ordinal and metric).
 
