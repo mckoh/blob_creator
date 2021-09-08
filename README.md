@@ -8,9 +8,11 @@ This generator creates a population of blobs. It delivers (a) an Excel data fram
 
 ![Dataframe](https://github.com/mckoh/blob_creator/raw/main/static/dataframe.png)
 
-The **population plot** displays all blobs with color and size. In addition to that, it shows blob names.
+The **population plot** displays all blobs with color and size. In addition to that, it shows blob names. There are three different kinds of base images that can be used to visualize blobs.
 
-![Blob population](https://github.com/mckoh/blob_creator/raw/main/static/population.png)
+![Blob population](https://github.com/mckoh/blob_creator/raw/main/static/population_alien.png)
+![Blob population](https://github.com/mckoh/blob_creator/raw/main/static/population_monster.png)
+![Blob population](https://github.com/mckoh/blob_creator/raw/main/static/population_boy.png)
 
 The **visualization plot** inklude a histogram of blob size and blob weights, as well as a bar chart with cuteness level counts and a scatter plot of size and weight.
 
@@ -26,13 +28,16 @@ You can **generate a new population** by calling:
 from blob_creator.core import BlobFactory
 
 # This instantiates a new blob factory
-blob_factory = BlobFactory(n=20, scatter=12, export_png=True)
+blob_factory = BlobFactory(n=20, scatter=12, kind="monster")
 
 # This will create the blobs
 blob_factory.create_blobs()
 
 # This will export your dataset and your population plot to disk
 blob_factory.export_data()
+
+# Finally, the output directory can be cleaned-up
+blob_factory.delete_individual_pngs()
 ```
 
 ## Package Installation
