@@ -47,7 +47,7 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: pytest_badge
-        path: pytest_badge.svg
+        path: ${{ github.workspace }}/static/pytest_badge.svg
     - name: Download pytest badge
       uses: actions/download-artifact@v2
       with:
