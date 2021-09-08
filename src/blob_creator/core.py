@@ -376,7 +376,7 @@ class BlobFactory:
     def get_png_status(self) -> bool:
         """Returns the PNG creation status"""
         return self._png_created
-    
+
     def get_base_parameters(self) -> tuple:
         """Returns n and scatter of an engine object"""
         return self._n, self._scatter
@@ -384,7 +384,7 @@ class BlobFactory:
     def get_population_string(self) -> None:
         """Can be used to generate a population string."""
         return f"blob_population_n{self._n}_s{self._scatter}"
-    
+
     def get_population(self) -> dict:
         """Can be used to get population object"""
         return self._population
