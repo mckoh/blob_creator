@@ -1,12 +1,15 @@
-name: Pylint
+name: Lint with PyLint
 
-on: [push]
+on:
+  push:
+    branches:
+      - main
 
 jobs:
-  build:
+
+  lint_with_pylint:
 
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python 3.9

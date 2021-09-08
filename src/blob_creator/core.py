@@ -16,6 +16,8 @@ from svglib.svglib import svg2rlg
 from reportlab.graphics import renderPM
 from PIL import Image
 from matplotlib import pyplot as plt
+from matplotlib import use
+
 from .const import REPLACE_STRING
 from .const import MONSTER, WIDTH_MONSTER, HEIGHT_MONSTER
 from .const import ALIEN, WIDTH_ALIEN, HEIGHT_ALIEN
@@ -24,6 +26,8 @@ from .const import MARSIAN, WIDTH_MARSIAN, HEIGHT_MARSIAN
 from .const import COLORS
 from .functions import dictionary_filter
 
+# Switch matplotlib backend
+use("agg")
 
 class BlobFactory:
     """BlobFactory class that is used to generate a blob data set.
@@ -203,8 +207,8 @@ class BlobFactory:
             )
             image = Image.open(img_name)
             width, height = image.size
-            width = int(width*self._population["scales"][i])
-            height = int(height*self._population["scales"][i])
+            width = max(int(width*self._population["scales"][i]), 1)
+            height = max(int(height*self._population["scales"][i]), 1)
             image = image.resize((width, height), Image.ANTIALIAS)
             image.save(fp=img_name)
 
@@ -257,7 +261,7 @@ class BlobFactory:
         """Can be used to export a dataframe with blob specs."""
 
         if not self._png_created:
-            print("No PNGs created")
+            assert False, "No PNGs created that I could export"
         else:
             if cols:
                 assert cols > 0, "Cols must be positive"
