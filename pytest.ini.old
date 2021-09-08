@@ -1,0 +1,3 @@
+[pytest]
+markers =
+    my_own: Marks own tests that are to be distinguished from third party tests
