@@ -82,9 +82,9 @@ class BlobFactory:
     def create_blobs(self) -> None:
         """Can be called to create a random set of blobs."""
 
-        if isdir(self._get_population_str()):
-            rmtree(self._get_population_str())
-        mkdir(self._get_population_str())
+        if isdir(self.get_population_string()):
+            rmtree(self.get_population_string())
+        mkdir(self.get_population_string())
 
         self._population = {
             "names": [],
@@ -156,11 +156,6 @@ class BlobFactory:
 
         return dataframe
 
-    def _get_population_str(self) -> None:
-        """Can be used to generate a population string."""
-
-        return f"blob_population_n{self._n}_s{self._scatter}"
-
     def _draw_blob(self, filename, color="#000000") -> None:
         """Can be used to generate a blob image as png
 
@@ -168,7 +163,7 @@ class BlobFactory:
         :param color: The HTML color that the blob should have
         """
 
-        path = join(self._get_population_str(), "temp.svg")
+        path = join(self.get_population_string(), "temp.svg")
 
         with open(path, "w", encoding="utf8") as temp_file:
             temp_file.write(
@@ -178,7 +173,7 @@ class BlobFactory:
         drawing = svg2rlg(path)
         renderPM.drawToFile(
             drawing,
-            join(self._get_population_str(), f"{filename}.png"),
+            join(self.get_population_string(), f"{filename}.png"),
             fmt="PNG"
         )
 
@@ -190,7 +185,7 @@ class BlobFactory:
             assert False, "No PNGs to delete."
         else:
             for name in self._population["names"]:
-                remove(join(self._get_population_str(), f"blob_{name}.png"))
+                remove(join(self.get_population_string(), f"blob_{name}.png"))
             self._png_created = False
 
     def _size_drawings(self) -> None:
@@ -203,7 +198,7 @@ class BlobFactory:
 
         for i, name in enumerate(self._population["names"]):
             img_name = join(
-                self._get_population_str(),
+                self.get_population_string(),
                 f"blob_{name}.png"
             )
             image = Image.open(img_name)
@@ -239,7 +234,7 @@ class BlobFactory:
                     break
                 name = self._population["names"][i]
                 img_path = join(
-                    self._get_population_str(),
+                    self.get_population_string(),
                     f"blob_{name}.png"
                 )
                 image = plt.imread(img_path)
@@ -270,11 +265,11 @@ class BlobFactory:
 
             dataframe = self._create_dataframe()
             dataframe.to_excel(
-                join(self._get_population_str(), "population.xlsx")
+                join(self.get_population_string(), "population.xlsx")
             )
 
             img_name = join(
-                self._get_population_str(),
+                self.get_population_string(),
                 "population.png"
             )
 
@@ -366,5 +361,26 @@ class BlobFactory:
         fig.suptitle("Analysis of Population")
 
         plt.savefig(
-            join(self._get_population_str(), "histograms.png")
+            join(self.get_population_string(), "histograms.png")
         )
+
+    # GETTER METHODS
+    def get_image_dimensions(self) -> tuple:
+        """Returns the images height and width"""
+        return self._kind_h, self._kind_w
+
+    def get_png_status(self) -> bool:
+        """Returns the PNG creation status"""
+        return self._png_created
+    
+    def get_base_parameters(self) -> tuple:
+        """Returns n and scatter of an engine object"""
+        return self._n, self._scatter
+
+    def get_population_string(self) -> None:
+        """Can be used to generate a population string."""
+        return f"blob_population_n{self._n}_s{self._scatter}"
+    
+    def get_population(self) -> dict:
+        """Can be used to get population object"""
+        return self._population
