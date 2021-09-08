@@ -34,4 +34,4 @@ def pytest_sessionfinish(session, exitstatus):
         test_score = passed_amount / (passed_amount + failed_amount) * 100
 
     badge = Badge('pytest score', test_score, thresholds=thresholds, default_color="red")
-    badge.write_badge('pytest.svg', overwrite=True)
+    badge.write_badge('pytest_badge.svg', overwrite=True)

@@ -43,6 +43,12 @@ jobs:
     - name: Test with pytest
       run: |
         pytest -v -k "my_own" test.py
+    - name: 'Upload pytest badge'
+      uses: actions/upload-artifact@v2
+      with:
+        name: pytest_badge
+        path: pytest_badge.svg
+
 
   publish_to_pypi:
 
