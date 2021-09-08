@@ -1,20 +1,29 @@
+"""
+Test Configuration for Blob Creator
+
+Author: Michael Kohlegger
+Date: 2021-09
+"""
 
 from anybadge import Badge
 import pytest
 
 
 def pytest_configure(config):
+    """Pytest configuration"""
     config.addinivalue_line(
         "markers", "my_own: Marks own tests that are to be distinguished from third party tests"
     )
 
 
 def pytest_sessionstart(session):
-    session.results = dict()
+    """Pytest hook for test start"""
+    session.results = {}
 
 
 @pytest.hookimpl(tryfirst=True, hookwrapper=True)
 def pytest_runtest_makereport(item, call):
+    """Pytest hook for test run"""
     outcome = yield
     result = outcome.get_result()
 
@@ -22,8 +31,9 @@ def pytest_runtest_makereport(item, call):
         item.session.results[item] = result
 
 
-def pytest_sessionfinish(session, exitstatus):
-    
+def pytest_sessionfinish(session, *_):
+    """Pytest hook for test end"""
+
     thresholds = {
         20: 'red',
         40: 'orange',
