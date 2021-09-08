@@ -3,6 +3,12 @@ from anybadge import Badge
 import pytest
 
 
+def pytest_configure(config):
+    config.addinivalue_line(
+        "markers", "my_own: Marks own tests that are to be distinguished from third party tests"
+    )
+
+
 def pytest_sessionstart(session):
     session.results = dict()
 
