@@ -13,7 +13,7 @@ with open("README.md", "r", encoding="utf8") as fh:
 
 setuptools.setup(
     name='blob_creator',
-    version='3.1.3',
+    version='3.2.0',
     author="Michael Kohlegger",
     author_email="michael@datenberge.org",
     description="Package to create dummy datasets for analysis tasks",

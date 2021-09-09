@@ -25,6 +25,7 @@ from .const import BOY, WIDTH_BOY, HEIGHT_BOY
 from .const import MARSIAN, WIDTH_MARSIAN, HEIGHT_MARSIAN
 from .const import COLORS
 from .functions import dictionary_filter
+from .uploader import upload_file
 
 # Switch matplotlib backend
 use("agg")
@@ -268,8 +269,8 @@ class BlobFactory:
                 assert isinstance(cols, int), "Cols must be int"
 
             dataframe = self._create_dataframe()
-            dataframe.to_excel(
-                join(self.get_population_string(), "population.xlsx")
+            dataframe.to_csv(
+                join(self.get_population_string(), "population.csv")
             )
 
             img_name = join(
@@ -366,6 +367,15 @@ class BlobFactory:
 
         plt.savefig(
             join(self.get_population_string(), "histograms.png")
+        )
+
+    def upload_dataset(self) -> None:
+        """Can be used to make the dataset publicly available"""
+        upload_file(
+            join(
+                self.get_population_string,
+                "population.csv"
+            )
         )
 
     # GETTER METHODS

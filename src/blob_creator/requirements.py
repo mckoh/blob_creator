@@ -15,5 +15,6 @@ hard_requirements = [
     "svglib",
     "reportlab",
     "wetransfer",
-    "pyocclient"
+    "pyocclient",
+    "requests"
 ]
