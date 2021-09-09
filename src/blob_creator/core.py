@@ -369,14 +369,18 @@ class BlobFactory:
             join(self.get_population_string(), "histograms.png")
         )
 
-    def upload_dataset(self) -> None:
-        """Can be used to make the dataset publicly available"""
-        upload_file(
+    def upload_dataset(self) -> str:
+        """Can be used to make the dataset publicly available
+
+        :return: URL of uploaded file
+        """
+        url = upload_file(
             join(
-                self.get_population_string,
+                self.get_population_string(),
                 "population.csv"
             )
         )
+        return url
 
     # GETTER METHODS
     def get_kind_parameters(self) -> tuple:
