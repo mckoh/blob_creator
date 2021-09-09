@@ -16,6 +16,8 @@ COLORS = [
     ("black", "#02161C")
 ]
 
+DROP_LINK = "https://owncloud.fh-kufstein.ac.at/index.php/s/ssd9cbbjd9gTH1O"
+
 REPLACE_STRING = "#??????"
 
 ALIEN = '''<?xml version="1.0" standalone="yes"?>

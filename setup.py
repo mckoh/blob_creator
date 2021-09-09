@@ -6,6 +6,7 @@ Date: 2021-09
 """
 
 import setuptools
+from src.blob_creator.requirements import hard_requirements
 
 with open("README.md", "r", encoding="utf8") as fh:
     long_description = fh.read()
@@ -30,14 +31,5 @@ setuptools.setup(
     package_dir={"": "src"},
     packages=setuptools.find_packages(where="src"),
     python_requires=">=3.6",
-    install_requires=[
-        "openpyxl",
-        "pandas",
-        "numpy",
-        "matplotlib",
-        "Pillow",
-        "names",
-        "svglib",
-        "reportlab"
-    ]
+    install_requires=hard_requirements
  )

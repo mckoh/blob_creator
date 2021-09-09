@@ -64,22 +64,22 @@ class BlobFactory:
         self._png_created = False
 
         if kind == "alien":
-            self._kind = ALIEN
+            self._kind = (kind, ALIEN)
             self._kind_w = WIDTH_ALIEN
             self._kind_h = HEIGHT_ALIEN
 
         elif kind == "monster":
-            self._kind = MONSTER
+            self._kind = (kind, MONSTER)
             self._kind_w = WIDTH_MONSTER
             self._kind_h = HEIGHT_MONSTER
 
         elif kind == "boy":
-            self._kind = BOY
+            self._kind = (kind, BOY)
             self._kind_w = WIDTH_BOY
             self._kind_h = HEIGHT_BOY
 
         elif kind == "marsian":
-            self._kind = MARSIAN
+            self._kind = (kind, MARSIAN)
             self._kind_w = WIDTH_MARSIAN
             self._kind_h = HEIGHT_MARSIAN
 
@@ -171,7 +171,7 @@ class BlobFactory:
 
         with open(path, "w", encoding="utf8") as temp_file:
             temp_file.write(
-                self._kind.replace(REPLACE_STRING, color)
+                self._kind[1].replace(REPLACE_STRING, color)
             )
 
         drawing = svg2rlg(path)
@@ -369,9 +369,9 @@ class BlobFactory:
         )
 
     # GETTER METHODS
-    def get_image_dimensions(self) -> tuple:
+    def get_kind_parameters(self) -> tuple:
         """Returns the images height and width"""
-        return self._kind_h, self._kind_w
+        return self._kind[0], self._kind_h, self._kind_w
 
     def get_png_status(self) -> bool:
         """Returns the PNG creation status"""
@@ -383,7 +383,7 @@ class BlobFactory:
 
     def get_population_string(self) -> None:
         """Can be used to generate a population string."""
-        return f"blob_population_n{self._n}_s{self._scatter}"
+        return f"blob_population_{self._kind[0]}_n{self._n}_s{self._scatter}"
 
     def get_population(self) -> dict:
         """Can be used to get population object"""

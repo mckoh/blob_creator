@@ -42,16 +42,16 @@ def test_img_dims():
     """Test method"""
     message = "Blob image width/height not correct"
     test_factory = BlobFactory(n=5, scatter=3, kind="monster")
-    height, width = test_factory.get_image_dimensions()
+    _, height, width = test_factory.get_kind_parameters()
     assert width == 512 and height == 512, message
     test_factory = BlobFactory(n=5, scatter=3, kind="alien")
-    height, width = test_factory.get_image_dimensions()
+    _, height, width = test_factory.get_kind_parameters()
     assert width == 417 and height == 476, message
     test_factory = BlobFactory(n=5, scatter=3, kind="boy")
-    height, width = test_factory.get_image_dimensions()
+    _, height, width = test_factory.get_kind_parameters()
     assert width == 600 and height == 600, message
     test_factory = BlobFactory(n=5, scatter=3, kind="marsian")
-    height, width = test_factory.get_image_dimensions()
+    _, height, width = test_factory.get_kind_parameters()
     assert width == 600 and height == 600, message
 
 
@@ -86,9 +86,13 @@ def test_scatter_range_high():
 def test_population_string():
     """Test method"""
     message = "Population string was not correctly generated"
-    test_factory = BlobFactory(n=5, scatter=1)
+    size = 5
+    scatter = 12
+    kind = "monster"
+    test_factory = BlobFactory(n=size, scatter=scatter, kind=kind)
     population_string = test_factory.get_population_string()
-    assert population_string == "blob_population_n5_s1", message
+    test_value = f"blob_population_{kind}_n{size}_s{scatter}"
+    assert population_string == test_value, message
 
 
 @mark.my_own
@@ -111,7 +115,7 @@ def test_image_creation():
     test_factory.create_blobs()
     dir_path = test_factory.get_population_string()
     assert len(listdir(dir_path)) == size, message
-    rmtree(f"blob_population_n{size}_s2")
+    rmtree(dir_path)
 
 
 @mark.my_own
@@ -124,7 +128,7 @@ def test_image_keeping():
     test_factory.export_data()
     dir_path = test_factory.get_population_string()
     assert len(listdir(dir_path)) == size+3, message
-    rmtree(f"blob_population_n{size}_s3")
+    rmtree(dir_path)
 
 
 @mark.my_own
@@ -138,7 +142,7 @@ def test_image_deletion():
     test_factory.delete_individual_pngs()
     dir_path = test_factory.get_population_string()
     assert len(listdir(dir_path)) == 3, message
-    rmtree(f"blob_population_n{size}_s4")
+    rmtree(dir_path)
 
 
 @mark.my_own
@@ -185,7 +189,7 @@ def test_int_cols():
         test_factory = BlobFactory(n=5, scatter=12)
         test_factory.create_blobs()
         test_factory.export_data(cols=2.0)
-        rmtree("blob_population_n5_s12")
+        rmtree(test_factory.get_population_string())
         assert False, message
 
 
@@ -197,7 +201,7 @@ def test_negative_cols():
         test_factory = BlobFactory(n=5, scatter=12)
         test_factory.create_blobs()
         test_factory.export_data(cols=0)
-        rmtree("blob_population_n5_s12")
+        rmtree(test_factory.get_population_string())
         assert False, message
 
 
@@ -215,7 +219,7 @@ def test_png_switch_after_creation():
     message = "PNG switch must be True after Creation"
     test_factory = BlobFactory(n=5, scatter=12)
     test_factory.create_blobs()
-    rmtree("blob_population_n5_s12")
+    rmtree(test_factory.get_population_string())
     assert test_factory.get_png_status(), message
 
 
@@ -226,7 +230,7 @@ def test_png_switch_after_delete():
     test_factory = BlobFactory(n=5, scatter=12)
     test_factory.create_blobs()
     test_factory.delete_individual_pngs()
-    rmtree("blob_population_n5_s12")
+    rmtree(test_factory.get_population_string())
     assert not test_factory.get_png_status(), message
 
 
@@ -248,7 +252,7 @@ def test_allow_multiple_creation():
     test_factory = BlobFactory(n=size, scatter=12)
     test_factory.create_blobs()
     test_factory.create_blobs()
-    rmtree(f"blob_population_n{size}_s12")
+    rmtree(test_factory.get_population_string())
     assert len(test_factory.get_population()["names"])==size, message
 
 
@@ -261,5 +265,5 @@ def test_reset_population_dir_on_recreation():
     test_factory.create_blobs()
     test_factory.create_blobs()
     count = len(listdir(test_factory.get_population_string()))
-    rmtree(f"blob_population_n{size}_s12")
+    rmtree(test_factory.get_population_string())
     assert count==size, message
