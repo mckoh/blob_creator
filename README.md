@@ -38,6 +38,10 @@ blob_factory.create_blobs()
 # This will export your dataset and your population plot to disk
 blob_factory.export_data()
 
+# Upload the csv file of the popoulation to share
+# it with your students
+blob_factory.upload_dataset()
+
 # Finally, the output directory can be cleaned-up
 blob_factory.delete_individual_pngs()
 ```
