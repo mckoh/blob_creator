@@ -6,13 +6,14 @@ Date: 2021-09
 """
 
 from os import listdir
-from os.path import isdir
+from os.path import isdir, join
 from shutil import rmtree
 
 from pytest import raises
 from pytest import mark
 
 from src.blob_creator.core import BlobFactory
+from src.blob_creator.uploader import create_guid_named_file
 
 
 @mark.my_own
@@ -267,3 +268,30 @@ def test_reset_population_dir_on_recreation():
     count = len(listdir(test_factory.get_population_string()))
     rmtree(test_factory.get_population_string())
     assert count==size, message
+
+
+@mark.my_own
+def test_uuid_file_creation():
+    """Test method"""
+    message = "Filecopy with uuid name was not correctly created"
+    test_factory = BlobFactory(n=5, scatter=2, kind="monster")
+    test_factory.create_blobs()
+    test_factory.export_data()
+    dir_path = test_factory.get_population_string()
+    file_name = "population.csv"
+    new_file_name = create_guid_named_file(file=file_name, path=dir_path)
+    dir_content = listdir(dir_path)
+    rmtree(dir_path)
+    assert new_file_name in dir_content, message
+
+
+@mark.my_own
+def test_cols_versus_n():
+    """Test method"""
+    message = "Software must not allow single-line population images"
+    with raises(AssertionError):
+        test_factory = BlobFactory(n=5, scatter=11, kind="monster")
+        test_factory.create_blobs()
+        test_factory.export_data(cols=5)
+        rmtree(test_factory.get_population_string())
+        assert False, message
