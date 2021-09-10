@@ -13,8 +13,6 @@ This generator creates a population of blobs. It delivers (a) an Excel data fram
 The **population plot** displays all blobs with color and size. In addition to that, it shows blob names. There are three different kinds of base images that can be used to visualize blobs.
 
 ![Blob population](https://github.com/mckoh/blob_creator/raw/main/static/population_alien.png)
-![Blob population](https://github.com/mckoh/blob_creator/raw/main/static/population_monster.png)
-![Blob population](https://github.com/mckoh/blob_creator/raw/main/static/populatio_boy.png)
 
 The **visualization plot** inklude a histogram of blob size and blob weights, as well as a bar chart with cuteness level counts and a scatter plot of size and weight.
 
