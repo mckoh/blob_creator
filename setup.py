@@ -15,7 +15,7 @@ with open('requirements.txt', "r", encoding="utf8") as requirement_file:
 
 setuptools.setup(
     name='blob_creator',
-    version='3.2.4',
+    version='3.2.5',
     author="Michael Kohlegger",
     author_email="michael@datenberge.org",
     description="Package to create dummy datasets for analysis tasks",
