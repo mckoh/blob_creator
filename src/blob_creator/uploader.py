@@ -7,6 +7,7 @@ Date: 2021/09
 
 from shutil import copyfile
 from os import remove
+from os.path import join
 from uuid import uuid4
 from urllib import parse
 from urllib.error import HTTPError
@@ -53,7 +54,7 @@ def upload_file(file) -> str:
     return shorten_url(long_url)
 
 
-def create_guid_named_file(file) -> str:
+def create_guid_named_file(file, path=None) -> str:
     """Can be used to create a copy of a file with a unique name
 
     :param file: The file that should be copied
@@ -64,5 +65,8 @@ def create_guid_named_file(file) -> str:
     ending = file.split(".")[1]
     new_name = str(uuid4())
     destination_file = f"{new_name}.{ending}"
-    copyfile(src=file, dst=destination_file)
+    copyfile(
+        src=join(path, file),
+        dst=join(path, destination_file)
+    )
     return destination_file
