@@ -6,7 +6,7 @@ Date: 2021-09
 """
 
 from os import listdir
-from os.path import isdir, join
+from os.path import isdir
 from shutil import rmtree
 
 from pytest import raises
