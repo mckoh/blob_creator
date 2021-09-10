@@ -9,4 +9,3 @@ svglib
 reportlab
 pyocclient
 requests
-urllib
