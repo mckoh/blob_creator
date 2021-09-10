@@ -267,6 +267,7 @@ class BlobFactory:
             if cols:
                 assert cols > 0, "Cols must be positive"
                 assert isinstance(cols, int), "Cols must be int"
+                assert cols < self._n, "Cols must be less than n"
 
             dataframe = self._create_dataframe()
             dataframe.to_csv(
