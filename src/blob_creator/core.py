@@ -210,7 +210,7 @@ class BlobFactory:
             width, height = image.size
             width = max(int(width*self._population["scales"][i]), 1)
             height = max(int(height*self._population["scales"][i]), 1)
-            image = image.resize((width, height), Image.ANTIALIAS)
+            image = image.resize((width, height), Image.LANCZOS )
             image.save(fp=img_name)
 
     def _plot_population(self, img_name, cols) -> None:
